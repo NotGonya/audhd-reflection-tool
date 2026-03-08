@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AuDHD Reflection Tool</title>
+  <style>
+    :root{
+      --bg:#0f172a;
+      --panel:#1e293b;
+      --panel2:#111827;
+      --border:#334155;
+      --text:#e5e7eb;
+      --muted:#94a3b8;
+      --accent:#60a5fa;
+      --accent2:#38bdf8;
+      --ok:#22c55e;
+      --warn:#f59e0b;
+      --danger:#ef4444;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      background:linear-gradient(180deg,#0b1220,#0f172a);
+      color:var(--text);
+      line-height:1.45;
+    }
+    .wrap{
+      max-width:1100px;
+      margin:0 auto;
+      padding:24px 16px 48px;
+    }
+    .hero{
+      margin-bottom:20px;
+      padding:20px;
+      border:1px solid var(--border);
+      border-radius:16px;
+      background:rgba(30,41,59,.9);
+      backdrop-filter:blur(8px);
+    }
+    h1{
+      margin:0 0 6px;
+      font-size:clamp(28px,4vw,40px);
+    }
+    .sub{
+      color:var(--muted);
+      margin:0;
+    }
+    .topbar{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:16px;
+      align-items:center;
+      margin:16px 0 20px;
+    }
+    .progressBox{
+      border:1px solid var(--border);
+      background:var(--panel);
+      border-radius:14px;
+      padding:12px 14px;
+    }
+    .progressText{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      font-size:14px;
+      color:var(--muted);
+      margin-bottom:8px;
+    }
+    .progress{
+      width:100%;
+      height:10px;
+      border-radius:999px;
+      background:#0b1220;
+      overflow:hidden;
+      border:1px solid var(--border);
+    }
+    .progressFill{
+      height:100%;
+      width:0%;
+      background:linear-gradient(90deg,var(--accent),var(--accent2));
+      transition:width .2s ease;
+    }
+    .actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+    button{
+      appearance:none;
+      border:none;
+      border-radius:10px;
+      padding:12px 16px;
+      cursor:pointer;
+      font-weight:700;
+      font-size:14px;
+    }
+    .btn-primary{background:var(--accent); color:#08111f;}
+    .btn-secondary{background:#cbd5e1; color:#111827;}
+    .btn-ghost{background:transparent; color:var(--text); border:1px solid var(--border);}
+    .grid{
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:20px;
+    }
+    .panel{
+      border:1px solid var(--border);
+      border-radius:16px;
+      background:var(--panel);
+      padding:18px;
+    }
+    .questions{
+      display:grid;
+      gap:14px;
+    }
+    .q{
+      border:1px solid var(--border);
+      border-radius:14px;
+      background:var(--panel2);
+      padding:14px;
+    }
+    .q h3{
+      margin:0 0 12px;
+      font-size:16px;
+    }
+    .opts{
+      display:grid;
+      gap:8px;
+    }
+    label.opt{
+      display:block;
+      border:1px solid var(--border);
+      border-radius:10px;
+      padding:10px 12px;
+      cursor:pointer;
+      transition:.15s ease;
+      background:#0b1220;
+    }
+    label.opt:hover{
+      border-color:#4b627f;
+      transform:translateY(-1px);
+    }
+    label.opt input{
+      margin-right:8px;
+    }
+    .sticky{
+      position:sticky;
+      top:16px;
+      align-self:start;
+    }
+    .scoreRow{
+      display:grid;
+      grid-template-columns:110px 1fr 56px;
+      gap:10px;
+      align-items:center;
+      margin:10px 0;
+      font-size:14px;
+    }
+    .bar{
+      height:12px;
+      background:#0b1220;
+      border:1px solid var(--border);
+      border-radius:999px;
+      overflow:hidden;
+    }
+    .bar > span{
+      display:block;
+      height:100%;
+      width:0%;
+      transition:width .25s ease;
+    }
+    .barA > span{background:#f59e0b;}
+    .barB > span{background:#22c55e;}
+    .barC > span{background:#60a5fa;}
+    .summary{
+      margin-top:16px;
+      padding:14px;
+      border:1px solid var(--border);
+      border-radius:12px;
+      background:#0b1220;
+    }
+    .summary h3{
+      margin:0 0 8px;
+      font-size:16px;
+    }
+    .muted{color:var(--muted)}
+    textarea{
+      width:100%;
+      min-height:220px;
+      margin-top:12px;
+      background:#020617;
+      color:var(--text);
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:12px;
+      resize:vertical;
+      font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size:13px;
+    }
+    .note{
+      margin-top:12px;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .warn{
+      color:#fde68a;
+      background:rgba(245,158,11,.12);
+      border:1px solid rgba(245,158,11,.35);
+      padding:10px 12px;
+      border-radius:10px;
+      margin-top:12px;
+      display:none;
+    }
+    .footer{
+      margin-top:14px;
+      font-size:12px;
+      color:var(--muted);
+    }
+    canvas{
+      width:100%;
+      max-width:320px;
+      height:auto;
+      display:block;
+      margin:8px auto 0;
+      background:#0b1220;
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:10px;
+    }
+    @media (max-width: 900px){
+      .grid{grid-template-columns:1fr}
+      .sticky{position:static}
+      .topbar{grid-template-columns:1fr}
+      .actions{justify-content:flex-start}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <h1>AuDHD Reflection Tool</h1>
+      <p class="sub">Pattern reflection only. Not diagnostic. Answer all 20 questions with A, B, or C to generate a visual profile and a clean copy-paste result.</p>
+    </section>
+
+    <div class="topbar">
+      <div class="progressBox">
+        <div class="progressText">
+          <span id="progressLabel">0 of 20 answered</span>
+          <span id="progressPct">0%</span>
+        </div>
+        <div class="progress"><div class="progressFill" id="progressFill"></div></div>
+      </div>
+
+      <div class="actions">
+        <button type="button" class="btn-primary" id="generateBtn">Generate Profile</button>
+        <button type="button" class="btn-secondary" id="copyBtn">Copy Output</button>
+        <button type="button" class="btn-ghost" id="resetBtn">Reset</button>
+      </div>
+    </div>
+
+    <div class="grid">
+      <section class="panel">
+        <div class="questions" id="form"></div>
+      </section>
+
+      <aside class="panel sticky">
+        <h2 style="margin-top:0">Visual Profile</h2>
+
+        <div class="scoreRow">
+          <div>ADHD-style</div>
+          <div class="bar barA"><span id="barA"></span></div>
+          <div id="scoreA">0/20</div>
+        </div>
+
+        <div class="scoreRow">
+          <div>Autism-style</div>
+          <div class="bar barB"><span id="barB"></span></div>
+          <div id="scoreB">0/20</div>
+        </div>
+
+        <div class="scoreRow">
+          <div>Overlap</div>
+          <div class="bar barC"><span id="barC"></span></div>
+          <div id="scoreC">0/20</div>
+        </div>
+
+        <canvas id="profileChart" width="320" height="320" aria-label="Profile chart"></canvas>
+
+        <div class="warn" id="warnBox"></div>
+
+        <div class="summary" id="result">
+          <h3>Profile summary</h3>
+          <div class="muted">Complete the questionnaire, then press Generate Profile.</div>
+        </div>
+
+        <textarea id="answers" placeholder="Your clean copy-paste output will appear here"></textarea>
+
+        <div class="note">
+          Tip: this works well as a GitHub Pages single-file tool.
+        </div>
+
+        <div class="footer">
+          This tool reflects answer patterns only. It does not diagnose ADHD, autism, or AuDHD.
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    const qs = [
+      ["When given instructions", "Forget steps", "Need precise structure", "Both"],
+      ["When plans suddenly change", "Adapt easily", "Change causes stress", "Dislike change but dislike rigid schedules"],
+      ["In conversation", "Interrupt or jump topics", "Analyse social rules", "Both"],
+      ["With routines", "Struggle to maintain them", "Strongly prefer them", "Want them but abandon them"],
+      ["Sensory environments", "Rarely bother me", "Overwhelm me", "Drain me over time"],
+      ["Interests", "Jump between interests", "Deep long-term interests", "Intense interests that rotate"],
+      ["Vague communication", "Fine with it", "Prefer direct literal language", "Understand but draining"],
+      ["Attention", "Jumps quickly", "Deep absorption", "Both"],
+      ["After conversations", "Move on quickly", "Analyse interactions", "Analyse sometimes"],
+      ["Starting tasks", "Struggle to start", "Need structure", "Both"],
+      ["Social interaction", "Draining due to boredom", "Draining due to processing", "Both"],
+      ["Learning topics", "Skim broadly", "Deep structured learning", "Deep across topics"],
+      ["Rules and systems", "Miss details", "Need logical consistency", "Both"],
+      ["Emotional reactions", "Rise quickly", "Build slowly", "Hard to regulate"],
+      ["Organisation", "Chaos appears", "Prefer structure", "Build systems then stop"],
+      ["Focus on interesting tasks", "Distracted later", "Absorbed for hours", "Hyperfocus"],
+      ["Reading facial expressions", "Automatic", "Difficult", "Conscious effort"],
+      ["Busy environments", "Distracting", "Overwhelming", "Draining"],
+      ["Planning the day", "Lose priorities", "Prefer schedules", "Plan but fail to follow"],
+      ["Overall challenge", "Attention", "Sensory or social load", "Mixture"]
+    ];
+
+    const form = document.getElementById("form");
+    const result = document.getElementById("result");
+    const answersBox = document.getElementById("answers");
+    const warnBox = document.getElementById("warnBox");
+
+    function renderQuestions(){
+      form.innerHTML = "";
+      qs.forEach((q, i) => {
+        const d = document.createElement("div");
+        d.className = "q";
+        d.innerHTML = `
+          <h3>${i + 1}. ${q[0]}</h3>
+          <div class="opts">
+            ${["A","B","C"].map((v,j) => `
+              <label class="opt">
+                <input type="radio" name="q${i}" value="${v}">
+                <strong>${v}</strong> ${q[j + 1]}
+              </label>
+            `).join("")}
+          </div>
+        `;
+        form.appendChild(d);
+      });
+
+      form.addEventListener("change", updateProgress);
+    }
+
+    function getAnswers(){
+      const answers = [];
+      let A = 0, B = 0, C = 0, complete = 0;
+
+      qs.forEach((q, i) => {
+        const picked = document.querySelector(`input[name="q${i}"]:checked`);
+        const value = picked ? picked.value : "";
+        if (value) complete++;
+        if (value === "A") A++;
+        if (value === "B") B++;
+        if (value === "C") C++;
+        answers.push(`${i + 1}. ${value || "-"}`);
+      });
+
+      return { A, B, C, complete, answers };
+    }
+
+    function updateProgress(){
+      const { complete } = getAnswers();
+      const pct = Math.round((complete / qs.length) * 100);
+      document.getElementById("progressLabel").textContent = `${complete} of ${qs.length} answered`;
+      document.getElementById("progressPct").textContent = `${pct}%`;
+      document.getElementById("progressFill").style.width = `${pct}%`;
+      warnBox.style.display = "none";
+    }
+
+    function interpretProfile(A, B, C){
+      const max = Math.max(A, B, C);
+
+      if (C >= 8 && C >= A && C >= B) {
+        return {
+          title: "Strong overlap pattern",
+          text: "Your answers lean toward an overlapping AuDHD-style pattern. That often shows up as mixed traits, wanting structure but struggling to hold it, switching between distraction and deep absorption, and social or sensory load building over time."
+        };
+      }
+
+      if (A === max && A >= 8) {
+        return {
+          title: "ADHD-leaning pattern",
+          text: "Your answers lean more toward an ADHD-style pattern. That often shows up as step loss, initiation friction, shifting attention, and difficulty holding priorities without external structure."
+        };
+      }
+
+      if (B === max && B >= 8) {
+        return {
+          title: "Autism-leaning pattern",
+          text: "Your answers lean more toward an autism-style pattern. That often shows up as needing consistency, processing social rules more consciously, and being more affected by sensory or change-related stress."
+        };
+      }
+
+      return {
+        title: "Mixed or balanced pattern",
+        text: "Your answers are fairly mixed. That suggests a blended profile or lower contrast across these reflection areas. The detail in the item-by-item answers matters more than the totals alone."
+      };
+    }
+
+    function generateOutput(data, profile){
+      return [
+        "AuDHD Reflection Questionnaire Results",
+        "",
+        `ADHD-style (A): ${data.A}/20`,
+        `Autism-style (B): ${data.B}/20`,
+        `Overlap (C): ${data.C}/20`,
+        "",
+        `Profile summary: ${profile.title}`,
+        profile.text,
+        "",
+        "Answers:",
+        ...data.answers,
+        "",
+        "Note: Pattern reflection only. Not diagnostic."
+      ].join("\n");
+    }
+
+    function drawChart(A, B, C){
+      const canvas = document.getElementById("profileChart");
+      const ctx = canvas.getContext("2d");
+      const w = canvas.width;
+      const h = canvas.height;
+      const cx = w / 2;
+      const cy = h / 2;
+      const radius = 105;
+      const labels = [
+        { name: "ADHD-style", value: A, color: "#f59e0b", angle: -Math.PI / 2 },
+        { name: "Autism-style", value: B, color: "#22c55e", angle: (Math.PI * 1 / 6) },
+        { name: "Overlap", value: C, color: "#60a5fa", angle: (Math.PI * 5 / 6) }
+      ];
+
+      ctx.clearRect(0, 0, w, h);
+
+      for (let r = 20; r <= radius; r += 20) {
+        ctx.beginPath();
+        ctx.strokeStyle = "#233045";
+        ctx.lineWidth = 1;
+        ctx.arc(cx, cy, r, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      labels.forEach(l => {
+        const x = cx + Math.cos(l.angle) * radius;
+        const y = cy + Math.sin(l.angle) * radius;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.lineTo(x, y);
+        ctx.strokeStyle = "#334155";
+        ctx.stroke();
+      });
+
+      labels.forEach(l => {
+        const scale = l.value / 20;
+        const x = cx + Math.cos(l.angle) * radius * scale;
+        const y = cy + Math.sin(l.angle) * radius * scale;
+
+        ctx.beginPath();
+        ctx.arc(x, y, 6, 0, Math.PI * 2);
+        ctx.fillStyle = l.color;
+        ctx.fill();
+      });
+
+      ctx.beginPath();
+      labels.forEach((l, idx) => {
+        const scale = l.value / 20;
+        const x = cx + Math.cos(l.angle) * radius * scale;
+        const y = cy + Math.sin(l.angle) * radius * scale;
+        if (idx === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.closePath();
+      ctx.fillStyle = "rgba(96,165,250,.18)";
+      ctx.strokeStyle = "#93c5fd";
+      ctx.lineWidth = 2;
+      ctx.fill();
+      ctx.stroke();
+
+      labels.forEach(l => {
+        const lx = cx + Math.cos(l.angle) * (radius + 24);
+        const ly = cy + Math.sin(l.angle) * (radius + 24);
+        ctx.fillStyle = "#e5e7eb";
+        ctx.font = "12px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText(`${l.name}: ${l.value}`, lx, ly);
+      });
+    }
+
+    function updateBars(A, B, C){
+      document.getElementById("scoreA").textContent = `${A}/20`;
+      document.getElementById("scoreB").textContent = `${B}/20`;
+      document.getElementById("scoreC").textContent = `${C}/20`;
+      document.getElementById("barA").style.width = `${A * 5}%`;
+      document.getElementById("barB").style.width = `${B * 5}%`;
+      document.getElementById("barC").style.width = `${C * 5}%`;
+    }
+
+    function generateProfile(){
+      const data = getAnswers();
+
+      if (data.complete < qs.length) {
+        warnBox.textContent = `Please answer all 20 questions first. You have completed ${data.complete} of 20.`;
+        warnBox.style.display = "block";
+        return;
+      }
+
+      const profile = interpretProfile(data.A, data.B, data.C);
+
+      result.innerHTML = `
+        <h3>${profile.title}</h3>
+        <p>${profile.text}</p>
+        <p><strong>Totals:</strong><br>
+        ADHD-style: ${data.A}/20<br>
+        Autism-style: ${data.B}/20<br>
+        Overlap: ${data.C}/20</p>
+      `;
+
+      answersBox.value = generateOutput(data, profile);
+      updateBars(data.A, data.B, data.C);
+      drawChart(data.A, data.B, data.C);
+      warnBox.style.display = "none";
+    }
+
+    async function copyOutput(){
+      const text = answersBox.value.trim();
+      if (!text) {
+        warnBox.textContent = "Generate a profile first, then copy the output.";
+        warnBox.style.display = "block";
+        return;
+      }
+      try {
+        await navigator.clipboard.writeText(text);
+        warnBox.textContent = "Copied to clipboard.";
+        warnBox.style.display = "block";
+      } catch {
+        warnBox.textContent = "Copy failed on this browser. Select the text and copy it manually.";
+        warnBox.style.display = "block";
+      }
+    }
+
+    function resetAll(){
+      document.querySelectorAll('input[type="radio"]').forEach(el => el.checked = false);
+      answersBox.value = "";
+      result.innerHTML = `
+        <h3>Profile summary</h3>
+        <div class="muted">Complete the questionnaire, then press Generate Profile.</div>
+      `;
+      updateBars(0,0,0);
+      drawChart(0,0,0);
+      updateProgress();
+      warnBox.style.display = "none";
+    }
+
+    document.getElementById("generateBtn").addEventListener("click", generateProfile);
+    document.getElementById("copyBtn").addEventListener("click", copyOutput);
+    document.getElementById("resetBtn").addEventListener("click", resetAll);
+
+    renderQuestions();
+    updateProgress();
+    updateBars(0,0,0);
+    drawChart(0,0,0);
+  </script>
+</body>
+</html>
