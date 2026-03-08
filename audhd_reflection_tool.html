@@ -1,539 +1,778 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AuDHD Reflection Questionnaire</title>
-<style>
-  :root{
-    --bg:#0f172a;
-    --panel:#111827;
-    --card:#1f2937;
-    --text:#e5e7eb;
-    --muted:#94a3b8;
-    --line:#334155;
-    --accent:#60a5fa;
-    --accent2:#34d399;
-    --accent3:#f59e0b;
-    --danger:#f87171;
-  }
-  *{box-sizing:border-box}
-  body{
-    margin:0;
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    background:linear-gradient(180deg,#0b1220 0%, #111827 100%);
-    color:var(--text);
-    line-height:1.45;
-  }
-  .wrap{
-    max-width:1000px;
-    margin:0 auto;
-    padding:24px 16px 64px;
-  }
-  .hero{
-    background:rgba(17,24,39,.9);
-    border:1px solid var(--line);
-    border-radius:20px;
-    padding:24px;
-    margin-bottom:20px;
-    box-shadow:0 10px 30px rgba(0,0,0,.25);
-  }
-  h1,h2,h3{margin:0 0 10px}
-  h1{font-size:2rem}
-  h2{font-size:1.35rem}
-  p{margin:0 0 10px}
-  .muted{color:var(--muted)}
-  .grid{
-    display:grid;
-    grid-template-columns:1.2fr .8fr;
-    gap:20px;
-  }
-  @media (max-width: 860px){
-    .grid{grid-template-columns:1fr}
-  }
-  .panel{
-    background:rgba(17,24,39,.92);
-    border:1px solid var(--line);
-    border-radius:20px;
-    padding:20px;
-    box-shadow:0 10px 30px rgba(0,0,0,.2);
-  }
-  .question{
-    padding:16px;
-    border:1px solid var(--line);
-    border-radius:16px;
-    margin-bottom:14px;
-    background:rgba(31,41,55,.55);
-  }
-  .q-title{
-    font-weight:700;
-    margin-bottom:10px;
-  }
-  .choices{
-    display:grid;
-    gap:8px;
-  }
-  label.choice{
-    display:flex;
-    gap:10px;
-    align-items:flex-start;
-    padding:10px 12px;
-    border:1px solid var(--line);
-    border-radius:12px;
-    cursor:pointer;
-    background:rgba(15,23,42,.5);
-  }
-  label.choice:hover{
-    border-color:#4b5563;
-    background:rgba(15,23,42,.75);
-  }
-  input[type="radio"]{
-    margin-top:2px;
-    accent-color:var(--accent);
-    transform:scale(1.15);
-  }
-  .sticky{
-    position:sticky;
-    top:14px;
-  }
-  .btns{
-    display:flex;
-    flex-wrap:wrap;
-    gap:10px;
-    margin-top:14px;
-  }
-  button{
-    appearance:none;
-    border:none;
-    border-radius:12px;
-    padding:12px 16px;
-    font-size:0.98rem;
-    font-weight:700;
-    cursor:pointer;
-  }
-  .primary{background:var(--accent); color:#08111f;}
-  .secondary{background:#243041; color:var(--text); border:1px solid var(--line);}
-  .danger{background:#3a1f26; color:#fecaca; border:1px solid #7f1d1d;}
-  .result-card{
-    background:rgba(31,41,55,.55);
-    border:1px solid var(--line);
-    border-radius:16px;
-    padding:16px;
-    margin-top:14px;
-  }
-  .score-row{
-    display:grid;
-    grid-template-columns:110px 1fr 56px;
-    gap:10px;
-    align-items:center;
-    margin:10px 0;
-  }
-  .bar{
-    height:12px;
-    border-radius:999px;
-    background:#0b1220;
-    overflow:hidden;
-    border:1px solid var(--line);
-  }
-  .fill{height:100%}
-  .a{background:var(--accent)}
-  .b{background:var(--accent2)}
-  .c{background:var(--accent3)}
-  canvas{
-    width:100%;
-    max-width:420px;
-    aspect-ratio:1/1;
-    display:block;
-    margin:8px auto 12px;
-    background:radial-gradient(circle at center, rgba(255,255,255,.02), rgba(255,255,255,0));
-    border-radius:14px;
-  }
-  .copybox{
-    width:100%;
-    min-height:220px;
-    border-radius:12px;
-    border:1px solid var(--line);
-    background:#0b1220;
-    color:var(--text);
-    padding:12px;
-    font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
-    font-size:.95rem;
-  }
-  .small{font-size:.92rem}
-  .pill{
-    display:inline-block;
-    padding:6px 10px;
-    border-radius:999px;
-    border:1px solid var(--line);
-    color:var(--muted);
-    margin:0 6px 6px 0;
-    font-size:.88rem;
-  }
-  .hidden{display:none}
-  .footer-note{
-    margin-top:16px;
-    color:var(--muted);
-    font-size:.88rem;
-  }
-  .status{
-    margin-top:8px;
-    min-height:22px;
-    color:#bfdbfe;
-    font-size:.92rem;
-  }
-  .section-title{
-    margin-top:18px;
-    margin-bottom:8px;
-  }
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AuDHD Reflection Tool</title>
+  <style>
+    :root{
+      --bg:#08111f;
+      --bg2:#0f172a;
+      --panel:#111c2e;
+      --panel2:#0b1220;
+      --border:#2a3a52;
+      --text:#e5e7eb;
+      --muted:#9aa8bc;
+      --blue:#60a5fa;
+      --blue2:#38bdf8;
+      --amber:#f59e0b;
+      --green:#22c55e;
+      --danger:#ef4444;
+      --shadow:0 10px 30px rgba(0,0,0,.28);
+      --radius:18px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(56,189,248,.12), transparent 24%),
+        radial-gradient(circle at top right, rgba(96,165,250,.10), transparent 22%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
+      line-height:1.45;
+    }
+
+    .wrap{
+      max-width:1180px;
+      margin:0 auto;
+      padding:20px 16px 48px;
+    }
+
+    .hero{
+      border:1px solid var(--border);
+      background:linear-gradient(180deg, rgba(17,28,46,.98), rgba(11,18,32,.96));
+      border-radius:24px;
+      padding:24px;
+      box-shadow:var(--shadow);
+      margin-bottom:18px;
+    }
+
+    .eyebrow{
+      display:inline-block;
+      font-size:12px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:#bfdbfe;
+      background:rgba(96,165,250,.12);
+      border:1px solid rgba(96,165,250,.25);
+      padding:6px 10px;
+      border-radius:999px;
+      margin-bottom:10px;
+    }
+
+    h1{
+      margin:0 0 8px;
+      font-size:clamp(30px, 4vw, 46px);
+      line-height:1.05;
+    }
+
+    .sub{
+      margin:0;
+      color:var(--muted);
+      max-width:820px;
+      font-size:15px;
+    }
+
+    .layout{
+      display:grid;
+      grid-template-columns:1.25fr .75fr;
+      gap:18px;
+    }
+
+    .panel{
+      border:1px solid var(--border);
+      background:linear-gradient(180deg, rgba(17,28,46,.97), rgba(11,18,32,.96));
+      border-radius:22px;
+      box-shadow:var(--shadow);
+    }
+
+    .left{
+      padding:18px;
+    }
+
+    .right{
+      padding:18px;
+      position:sticky;
+      top:16px;
+      align-self:start;
+    }
+
+    .topbar{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:14px;
+      align-items:center;
+      margin-bottom:16px;
+    }
+
+    .progressCard{
+      border:1px solid var(--border);
+      background:rgba(8,17,31,.8);
+      border-radius:16px;
+      padding:12px 14px;
+    }
+
+    .progressMeta{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      color:var(--muted);
+      font-size:13px;
+      margin-bottom:8px;
+    }
+
+    .progress{
+      height:12px;
+      border-radius:999px;
+      overflow:hidden;
+      background:#060c17;
+      border:1px solid #213049;
+    }
+
+    .progressFill{
+      height:100%;
+      width:0%;
+      background:linear-gradient(90deg, var(--blue), var(--blue2));
+      transition:width .2s ease;
+    }
+
+    .btns{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    button{
+      appearance:none;
+      border:none;
+      cursor:pointer;
+      border-radius:12px;
+      padding:12px 16px;
+      font-weight:700;
+      font-size:14px;
+      transition:transform .12s ease, opacity .12s ease;
+    }
+
+    button:hover{transform:translateY(-1px)}
+    button:active{transform:translateY(0)}
+    .primary{background:linear-gradient(90deg, var(--blue), var(--blue2)); color:#061120}
+    .secondary{background:#dbeafe; color:#0b1220}
+    .ghost{background:transparent; color:var(--text); border:1px solid var(--border)}
+
+    .sectionTitle{
+      margin:0 0 10px;
+      font-size:18px;
+    }
+
+    .help{
+      margin:0 0 14px;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .questions{
+      display:grid;
+      gap:14px;
+    }
+
+    .q{
+      border:1px solid var(--border);
+      border-radius:16px;
+      background:rgba(8,17,31,.72);
+      padding:14px;
+    }
+
+    .q h3{
+      margin:0 0 12px;
+      font-size:16px;
+    }
+
+    .opts{
+      display:grid;
+      gap:8px;
+    }
+
+    .opt{
+      display:block;
+      border:1px solid var(--border);
+      border-radius:12px;
+      background:#09111f;
+      padding:11px 12px;
+      cursor:pointer;
+      transition:border-color .14s ease, transform .14s ease, background .14s ease;
+    }
+
+    .opt:hover{
+      border-color:#45607f;
+      transform:translateY(-1px);
+      background:#0b1526;
+    }
+
+    .opt input{
+      margin-right:8px;
+      accent-color:var(--blue);
+    }
+
+    .opt strong{
+      display:inline-block;
+      min-width:22px;
+    }
+
+    .scoreGrid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:10px;
+      margin:12px 0 16px;
+    }
+
+    .scoreCard{
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:14px;
+      background:#09111f;
+      text-align:center;
+    }
+
+    .scoreCard .label{
+      font-size:12px;
+      color:var(--muted);
+      margin-bottom:8px;
+      text-transform:uppercase;
+      letter-spacing:.04em;
+    }
+
+    .scoreCard .value{
+      font-size:28px;
+      font-weight:800;
+      line-height:1;
+      margin-bottom:6px;
+    }
+
+    .scoreCard .small{
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .adhd .value{color:var(--amber)}
+    .autism .value{color:var(--green)}
+    .overlap .value{color:var(--blue)}
+
+    canvas{
+      width:100%;
+      max-width:340px;
+      height:auto;
+      display:block;
+      margin:0 auto 14px;
+      border:1px solid var(--border);
+      border-radius:18px;
+      background:#08111f;
+      padding:10px;
+    }
+
+    .summary{
+      border:1px solid var(--border);
+      border-radius:16px;
+      background:#09111f;
+      padding:14px;
+      margin-bottom:14px;
+    }
+
+    .summary h3{
+      margin:0 0 8px;
+      font-size:17px;
+    }
+
+    .summary p{
+      margin:0 0 10px;
+      color:var(--text);
+      font-size:14px;
+    }
+
+    .muted{
+      color:var(--muted);
+    }
+
+    .callout{
+      display:none;
+      border:1px solid rgba(239,68,68,.35);
+      background:rgba(239,68,68,.12);
+      color:#fecaca;
+      border-radius:14px;
+      padding:12px 14px;
+      margin-bottom:14px;
+      font-size:14px;
+    }
+
+    .share{
+      border:1px solid var(--border);
+      border-radius:16px;
+      background:#09111f;
+      padding:14px;
+      margin-bottom:14px;
+    }
+
+    .share h3{
+      margin:0 0 8px;
+      font-size:16px;
+    }
+
+    textarea{
+      width:100%;
+      min-height:240px;
+      border:1px solid var(--border);
+      border-radius:14px;
+      background:#020617;
+      color:var(--text);
+      padding:12px;
+      resize:vertical;
+      font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size:13px;
+      line-height:1.45;
+    }
+
+    .foot{
+      color:var(--muted);
+      font-size:12px;
+      margin-top:12px;
+    }
+
+    .friendBox{
+      border:1px solid var(--border);
+      border-radius:16px;
+      background:#09111f;
+      padding:14px;
+      margin-top:14px;
+    }
+
+    .friendBox h3{
+      margin:0 0 8px;
+      font-size:16px;
+    }
+
+    .friendBox p{
+      margin:0 0 8px;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .mini{
+      margin:0;
+      padding-left:18px;
+      color:var(--text);
+      font-size:14px;
+    }
+
+    @media (max-width: 940px){
+      .layout{grid-template-columns:1fr}
+      .right{position:static}
+      .topbar{grid-template-columns:1fr}
+    }
+
+    @media (max-width: 560px){
+      .scoreGrid{grid-template-columns:1fr}
+      .hero,.left,.right{padding:16px}
+      button{width:100%}
+      .btns{display:grid}
+    }
+  </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="hero">
-    <h1>AuDHD Reflection Questionnaire</h1>
-    <p>This is a reusable self-reflection tool. It is not diagnostic. It shows pattern balance across ADHD-style traits, autism-style traits, and overlap.</p>
-    <p class="muted">Open the page, answer A, B, or C for each question, then generate a visual profile chart and a copy-paste answer list.</p>
-    <div>
-      <span class="pill">Single file</span>
-      <span class="pill">No sign-in</span>
-      <span class="pill">Works on phone</span>
-      <span class="pill">Copy-paste output</span>
+  <div class="wrap">
+    <section class="hero">
+      <div class="eyebrow">Pattern reflection only</div>
+      <h1>AuDHD Reflection Tool</h1>
+      <p class="sub">
+        Answer all 20 questions with A, B, or C. The tool will generate a visual profile, a plain-English summary, and a clean copy-paste output you can share or drop into an AI prompt.
+      </p>
+    </section>
+
+    <div class="layout">
+      <section class="panel left">
+        <div class="topbar">
+          <div class="progressCard">
+            <div class="progressMeta">
+              <span id="progressLabel">0 of 20 answered</span>
+              <span id="progressPct">0%</span>
+            </div>
+            <div class="progress">
+              <div class="progressFill" id="progressFill"></div>
+            </div>
+          </div>
+
+          <div class="btns">
+            <button type="button" class="primary" id="generateBtn">Generate Profile</button>
+            <button type="button" class="secondary" id="copyBtn">Copy Output</button>
+            <button type="button" class="ghost" id="resetBtn">Reset</button>
+          </div>
+        </div>
+
+        <h2 class="sectionTitle">Questionnaire</h2>
+        <p class="help">Pick one answer per question. A and B represent stronger single-direction traits. C reflects overlap or mixed presentation.</p>
+
+        <div class="questions" id="form"></div>
+      </section>
+
+      <aside class="panel right">
+        <div class="callout" id="callout"></div>
+
+        <div class="scoreGrid">
+          <div class="scoreCard adhd">
+            <div class="label">ADHD-style</div>
+            <div class="value" id="scoreA">0</div>
+            <div class="small">out of 20</div>
+          </div>
+          <div class="scoreCard autism">
+            <div class="label">Autism-style</div>
+            <div class="value" id="scoreB">0</div>
+            <div class="small">out of 20</div>
+          </div>
+          <div class="scoreCard overlap">
+            <div class="label">Overlap</div>
+            <div class="value" id="scoreC">0</div>
+            <div class="small">out of 20</div>
+          </div>
+        </div>
+
+        <canvas id="profileChart" width="340" height="340" aria-label="Visual profile chart"></canvas>
+
+        <div class="summary" id="summaryBox">
+          <h3>Profile summary</h3>
+          <p class="muted">Complete the questionnaire, then press Generate Profile.</p>
+        </div>
+
+        <div class="share">
+          <h3>Copy-paste output</h3>
+          <textarea id="answers" placeholder="Your results will appear here"></textarea>
+        </div>
+
+        <div class="friendBox">
+          <h3>How to use this</h3>
+          <p>This is for reflection, not diagnosis.</p>
+          <ol class="mini">
+            <li>Answer all 20 questions.</li>
+            <li>Press Generate Profile.</li>
+            <li>Press Copy Output.</li>
+            <li>Paste the output into your notes or an AI prompt for interpretation.</li>
+          </ol>
+        </div>
+
+        <div class="foot">
+          This tool reflects answer patterns only. It does not diagnose ADHD, autism, or AuDHD.
+        </div>
+      </aside>
     </div>
   </div>
 
-  <div class="grid">
-    <div class="panel">
-      <h2>Questionnaire</h2>
-      <p class="muted small">Answer every question. The chart updates when you click Generate profile.</p>
-      <form id="quiz"></form>
-    </div>
+  <script>
+    const qs = [
+      ["When given instructions", "Forget steps", "Need precise structure", "Both"],
+      ["When plans suddenly change", "Adapt easily", "Change causes stress", "Dislike change but dislike rigid schedules"],
+      ["In conversation", "Interrupt or jump topics", "Analyse social rules", "Both"],
+      ["With routines", "Struggle to maintain them", "Strongly prefer them", "Want them but abandon them"],
+      ["Sensory environments", "Rarely bother me", "Overwhelm me", "Drain me over time"],
+      ["Interests", "Jump between interests", "Deep long-term interests", "Intense interests that rotate"],
+      ["Vague communication", "Fine with it", "Prefer direct literal language", "Understand but draining"],
+      ["Attention", "Jumps quickly", "Deep absorption", "Both"],
+      ["After conversations", "Move on quickly", "Analyse interactions", "Analyse sometimes"],
+      ["Starting tasks", "Struggle to start", "Need structure", "Both"],
+      ["Social interaction", "Draining due to boredom", "Draining due to processing", "Both"],
+      ["Learning topics", "Skim broadly", "Deep structured learning", "Deep across topics"],
+      ["Rules and systems", "Miss details", "Need logical consistency", "Both"],
+      ["Emotional reactions", "Rise quickly", "Build slowly", "Hard to regulate"],
+      ["Organisation", "Chaos appears", "Prefer structure", "Build systems then stop"],
+      ["Focus on interesting tasks", "Distracted later", "Absorbed for hours", "Hyperfocus"],
+      ["Reading facial expressions", "Automatic", "Difficult", "Conscious effort"],
+      ["Busy environments", "Distracting", "Overwhelming", "Draining"],
+      ["Planning the day", "Lose priorities", "Prefer schedules", "Plan but fail to follow"],
+      ["Overall challenge", "Attention", "Sensory or social load", "Mixture"]
+    ];
 
-    <div class="panel sticky">
-      <h2>Profile</h2>
-      <p class="muted small">A adds to ADHD-style score. B adds to autism-style score. C adds to overlap score.</p>
+    const form = document.getElementById("form");
+    const answersBox = document.getElementById("answers");
+    const callout = document.getElementById("callout");
+    const summaryBox = document.getElementById("summaryBox");
 
-      <canvas id="radar" width="420" height="420" aria-label="Radar chart"></canvas>
+    function renderQuestions(){
+      form.innerHTML = "";
+      qs.forEach((q, i) => {
+        const card = document.createElement("div");
+        card.className = "q";
+        card.innerHTML = `
+          <h3>${i + 1}. ${q[0]}</h3>
+          <div class="opts">
+            ${["A","B","C"].map((v, j) => `
+              <label class="opt">
+                <input type="radio" name="q${i}" value="${v}">
+                <strong>${v}</strong> ${q[j + 1]}
+              </label>
+            `).join("")}
+          </div>
+        `;
+        form.appendChild(card);
+      });
+      form.addEventListener("change", updateProgress);
+    }
 
-      <div class="result-card">
-        <div class="score-row">
-          <div>ADHD-style</div>
-          <div class="bar"><div id="barA" class="fill a" style="width:0%"></div></div>
-          <div id="scoreA">0</div>
-        </div>
-        <div class="score-row">
-          <div>Autism-style</div>
-          <div class="bar"><div id="barB" class="fill b" style="width:0%"></div></div>
-          <div id="scoreB">0</div>
-        </div>
-        <div class="score-row">
-          <div>Overlap</div>
-          <div class="bar"><div id="barC" class="fill c" style="width:0%"></div></div>
-          <div id="scoreC">0</div>
-        </div>
-      </div>
+    function getAnswers(){
+      let A = 0, B = 0, C = 0, complete = 0;
+      const list = [];
 
-      <div class="btns">
-        <button class="primary" type="button" id="calcBtn">Generate profile</button>
-        <button class="secondary" type="button" id="copyBtn">Copy answers</button>
-        <button class="secondary" type="button" id="copyLinkBtn">Copy shareable link</button>
-        <button class="danger" type="button" id="resetBtn">Reset</button>
-      </div>
+      qs.forEach((q, i) => {
+        const picked = document.querySelector(`input[name="q${i}"]:checked`);
+        const value = picked ? picked.value : "";
+        if (value) complete++;
+        if (value === "A") A++;
+        if (value === "B") B++;
+        if (value === "C") C++;
+        list.push(`${i + 1}. ${value || "-"}`);
+      });
 
-      <div class="status" id="status"></div>
+      return { A, B, C, complete, list };
+    }
 
-      <h3 class="section-title">Pattern summary</h3>
-      <div id="summary" class="result-card small">
-        Complete the questionnaire, then generate the profile.
-      </div>
+    function updateProgress(){
+      const { complete } = getAnswers();
+      const pct = Math.round((complete / qs.length) * 100);
+      document.getElementById("progressLabel").textContent = `${complete} of ${qs.length} answered`;
+      document.getElementById("progressPct").textContent = `${pct}%`;
+      document.getElementById("progressFill").style.width = `${pct}%`;
+      hideCallout();
+    }
 
-      <h3 class="section-title">Copy-paste answers</h3>
-      <textarea id="answerBox" class="copybox" readonly>1. 
-2. 
-3. 
-4. 
-5. 
-6. 
-7. 
-8. 
-9. 
-10. 
-11. 
-12. 
-13. 
-14. 
-15. 
-16. 
-17. 
-18. 
-19. 
-20. </textarea>
+    function showCallout(msg, danger = true){
+      callout.textContent = msg;
+      callout.style.display = "block";
+      if (danger) {
+        callout.style.borderColor = "rgba(239,68,68,.35)";
+        callout.style.background = "rgba(239,68,68,.12)";
+        callout.style.color = "#fecaca";
+      } else {
+        callout.style.borderColor = "rgba(96,165,250,.35)";
+        callout.style.background = "rgba(96,165,250,.12)";
+        callout.style.color = "#dbeafe";
+      }
+    }
 
-      <p class="footer-note">Tip: If you host this on GitHub Pages or any simple web host, the page URL becomes the single shareable link.</p>
-    </div>
-  </div>
-</div>
+    function hideCallout(){
+      callout.style.display = "none";
+    }
 
-<script>
-const questions = [
-  ["When given instructions", "Forget steps", "Need precise structure", "Both"],
-  ["When plans suddenly change", "Adapt easily", "Change causes stress", "Dislike change but dislike rigid schedules"],
-  ["In conversation", "Interrupt or jump topics", "Analyse social rules", "Both"],
-  ["With routines", "Struggle to maintain them", "Strongly prefer them", "Want them but abandon them"],
-  ["Sensory environments, noise, light, crowds", "Rarely bother me", "Overwhelm me", "Drain me over time"],
-  ["Interests", "Jump between interests", "Deep long-term interests", "Intense interests that rotate"],
-  ["Vague communication", "Fine with it", "Prefer direct literal language", "Understand but it drains mental energy"],
-  ["Attention", "Jumps quickly", "Deep absorption", "Both"],
-  ["After conversations", "Move on quickly", "Analyse interactions", "Analyse sometimes"],
-  ["Starting tasks", "Struggle to start", "Need clear structure first", "Both"],
-  ["Social interaction", "Draining due to boredom", "Draining due to processing effort", "Both"],
-  ["Learning topics", "Skim broadly", "Deep structured learning", "Deep learning across many related topics"],
-  ["Rules and systems", "Miss details due to attention", "Want logical consistency", "Both"],
-  ["Emotional reactions", "Rise quickly and pass", "Build slowly but persist", "Intense emotions hard to regulate"],
-  ["Organisation", "Chaos appears", "Prefer structured systems", "Build systems but stop maintaining them"],
-  ["Focus on interesting tasks", "Distracted after a while", "Absorbed for hours", "Hyperfocus"],
-  ["Reading facial expressions", "Automatic", "Difficult", "Possible but conscious effort"],
-  ["Busy environments", "Distracting", "Overwhelming", "Tolerable but draining"],
-  ["Planning the day", "Lose track of priorities", "Prefer structured schedules", "Plan but struggle to follow"],
-  ["Overall challenge", "Attention and follow-through", "Sensory and social processing", "Mixture of both"]
-];
+    function updateScoreCards(A, B, C){
+      document.getElementById("scoreA").textContent = A;
+      document.getElementById("scoreB").textContent = B;
+      document.getElementById("scoreC").textContent = C;
+    }
 
-const form = document.getElementById('quiz');
-const answerBox = document.getElementById('answerBox');
-const statusEl = document.getElementById('status');
-const summaryEl = document.getElementById('summary');
+    function interpret(A, B, C){
+      const strongest = Math.max(A, B, C);
 
-function buildForm(){
-  questions.forEach((q, idx) => {
-    const n = idx + 1;
-    const div = document.createElement('div');
-    div.className = 'question';
-    div.innerHTML = `
-      <div class="q-title">${n}. ${q[0]}</div>
-      <div class="choices">
-        <label class="choice"><input type="radio" name="q${n}" value="A"><span><strong>A</strong>. ${q[1]}</span></label>
-        <label class="choice"><input type="radio" name="q${n}" value="B"><span><strong>B</strong>. ${q[2]}</span></label>
-        <label class="choice"><input type="radio" name="q${n}" value="C"><span><strong>C</strong>. ${q[3]}</span></label>
-      </div>
-    `;
-    form.appendChild(div);
-  });
-}
-buildForm();
+      if (C >= 8 && C >= A && C >= B) {
+        return {
+          title: "Strong overlap pattern",
+          text: "Your answers lean toward an overlapping AuDHD-style pattern. This often shows up as wanting structure but struggling to keep it, shifting between distraction and deep absorption, and carrying both attention friction and sensory or social strain.",
+          notes: [
+            "Mixed presentation is the main feature.",
+            "Tension between flexibility and structure is likely.",
+            "Support usually works best when it reduces friction without becoming rigid."
+          ]
+        };
+      }
 
-function getAnswers(){
-  const answers = [];
-  for(let i=1;i<=questions.length;i++){
-    const checked = document.querySelector(`input[name="q${i}"]:checked`);
-    answers.push(checked ? checked.value : "");
-  }
-  return answers;
-}
+      if (A === strongest && A >= 8) {
+        return {
+          title: "ADHD-leaning pattern",
+          text: "Your answers lean more toward an ADHD-style pattern. This often shows up as difficulty starting, losing steps, jumping attention, forgetting priorities, and needing external structure to stay on track.",
+          notes: [
+            "Initiation and working memory are likely pain points.",
+            "Interest often drives focus more than importance.",
+            "Visible prompts and short action steps tend to help."
+          ]
+        };
+      }
 
-function updateAnswerBox(answers){
-  answerBox.value = answers.map((a, i) => `${i+1}. ${a}`).join("\n");
-}
+      if (B === strongest && B >= 8) {
+        return {
+          title: "Autism-leaning pattern",
+          text: "Your answers lean more toward an autism-style pattern. This often shows up as higher need for consistency, social processing effort, change friction, and stronger impact from sensory or environment load.",
+          notes: [
+            "Predictability likely reduces stress.",
+            "Literal and direct communication tends to help.",
+            "Energy drain may come from processing, not lack of interest."
+          ]
+        };
+      }
 
-function calcScores(answers){
-  let A=0, B=0, C=0;
-  answers.forEach(v => {
-    if(v === "A") A++;
-    if(v === "B") B++;
-    if(v === "C") C++;
-  });
-  return {A, B, C};
-}
+      return {
+        title: "Mixed or balanced pattern",
+        text: "Your answers are fairly mixed. This suggests a lower-contrast or blended profile across these reflection areas. The detail of each answer matters more than the total counts alone.",
+        notes: [
+          "Review the individual answers, not only the totals.",
+          "Specific friction points may matter more than profile label.",
+          "Support should target the daily problems you notice most."
+        ]
+      };
+    }
 
-function percent(score){
-  return Math.round((score / questions.length) * 100);
-}
+    function buildOutput(data, profile){
+      return [
+        "AuDHD Reflection Questionnaire Results",
+        "",
+        `ADHD-style (A): ${data.A}/20`,
+        `Autism-style (B): ${data.B}/20`,
+        `Overlap (C): ${data.C}/20`,
+        "",
+        `Profile summary: ${profile.title}`,
+        profile.text,
+        "",
+        "Key notes:",
+        `- ${profile.notes[0]}`,
+        `- ${profile.notes[1]}`,
+        `- ${profile.notes[2]}`,
+        "",
+        "Answers:",
+        ...data.list,
+        "",
+        "Note: Pattern reflection only. Not diagnostic."
+      ].join("\n");
+    }
 
-function classify({A, B, C}){
-  const arr = [
-    {k:'ADHD-style', v:A},
-    {k:'Autism-style', v:B},
-    {k:'Overlap', v:C}
-  ].sort((x,y) => y.v - x.v);
+    function renderSummary(data, profile){
+      summaryBox.innerHTML = `
+        <h3>${profile.title}</h3>
+        <p>${profile.text}</p>
+        <p><strong>Totals</strong><br>
+        ADHD-style: ${data.A}/20<br>
+        Autism-style: ${data.B}/20<br>
+        Overlap: ${data.C}/20</p>
+        <p class="muted">
+          ${profile.notes.join("<br>")}
+        </p>
+      `;
+    }
 
-  const top = arr[0], second = arr[1];
-  let line1 = `Highest pattern area: ${top.k} (${top.v}/20).`;
-  let line2 = `Secondary area: ${second.k} (${second.v}/20).`;
-  let line3 = "";
-  if (C >= A && C >= B) {
-    line3 = "This profile leans toward mixed-trait overlap. People in this range often show internal contradiction, wanting structure but struggling to hold it, or handling a setting at first but feeling drained later.";
-  } else if (A > B && A > C) {
-    line3 = "This profile leans more toward ADHD-style patterns. Common themes are initiation friction, shifting attention, and difficulty holding structure consistently.";
-  } else if (B > A && B > C) {
-    line3 = "This profile leans more toward autism-style patterns. Common themes are processing load, need for clarity, routine preference, and sensory or social drain.";
-  } else {
-    line3 = "This profile looks fairly mixed. The useful takeaway is to plan support around the friction points, not around one label.";
-  }
-  return `${line1}<br><br>${line2}<br><br>${line3}<br><br>This tool is reflective only. It does not diagnose ADHD, autism, or AuDHD.`;
-}
+    function drawChart(A, B, C){
+      const canvas = document.getElementById("profileChart");
+      const ctx = canvas.getContext("2d");
+      const w = canvas.width;
+      const h = canvas.height;
+      const cx = w / 2;
+      const cy = h / 2;
+      const r = 110;
 
-function drawRadar(scores){
-  const canvas = document.getElementById('radar');
-  const ctx = canvas.getContext('2d');
-  const w = canvas.width, h = canvas.height;
-  ctx.clearRect(0,0,w,h);
+      ctx.clearRect(0, 0, w, h);
 
-  const cx = w/2, cy = h/2 + 8;
-  const radius = 140;
-  const axes = [
-    {label:'ADHD-style', angle:-Math.PI/2},
-    {label:'Autism-style', angle:(-Math.PI/2) + (2*Math.PI/3)},
-    {label:'Overlap', angle:(-Math.PI/2) + (4*Math.PI/3)}
-  ];
+      for (let ring = 22; ring <= r; ring += 22) {
+        ctx.beginPath();
+        ctx.arc(cx, cy, ring, 0, Math.PI * 2);
+        ctx.strokeStyle = "#213049";
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      }
 
-  ctx.strokeStyle = 'rgba(148,163,184,.35)';
-  ctx.fillStyle = 'rgba(148,163,184,.7)';
-  ctx.lineWidth = 1;
+      const points = [
+        { label:"ADHD-style", value:A, angle:-Math.PI/2, color:"#f59e0b" },
+        { label:"Autism-style", value:B, angle:(Math.PI/6), color:"#22c55e" },
+        { label:"Overlap", value:C, angle:(Math.PI*5/6), color:"#60a5fa" }
+      ];
 
-  for(let level=1; level<=5; level++){
-    const r = radius * (level/5);
-    ctx.beginPath();
-    axes.forEach((ax, i) => {
-      const x = cx + Math.cos(ax.angle) * r;
-      const y = cy + Math.sin(ax.angle) * r;
-      if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
-    });
-    ctx.closePath();
-    ctx.stroke();
-  }
+      points.forEach(p => {
+        const x = cx + Math.cos(p.angle) * r;
+        const y = cy + Math.sin(p.angle) * r;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.lineTo(x, y);
+        ctx.strokeStyle = "#334155";
+        ctx.stroke();
+      });
 
-  axes.forEach(ax => {
-    const x = cx + Math.cos(ax.angle) * radius;
-    const y = cy + Math.sin(ax.angle) * radius;
-    ctx.beginPath();
-    ctx.moveTo(cx, cy);
-    ctx.lineTo(x, y);
-    ctx.stroke();
+      ctx.beginPath();
+      points.forEach((p, i) => {
+        const scale = p.value / 20;
+        const px = cx + Math.cos(p.angle) * r * scale;
+        const py = cy + Math.sin(p.angle) * r * scale;
+        if (i === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      });
+      ctx.closePath();
+      ctx.fillStyle = "rgba(96,165,250,.18)";
+      ctx.strokeStyle = "#93c5fd";
+      ctx.lineWidth = 2;
+      ctx.fill();
+      ctx.stroke();
 
-    const lx = cx + Math.cos(ax.angle) * (radius + 28);
-    const ly = cy + Math.sin(ax.angle) * (radius + 28);
-    ctx.font = '14px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillStyle = '#e5e7eb';
-    ctx.fillText(ax.label, lx, ly);
-  });
+      points.forEach(p => {
+        const scale = p.value / 20;
+        const px = cx + Math.cos(p.angle) * r * scale;
+        const py = cy + Math.sin(p.angle) * r * scale;
 
-  const values = [scores.A, scores.B, scores.C].map(v => v / 20);
-  const colors = ['#60a5fa', '#34d399', '#f59e0b'];
+        ctx.beginPath();
+        ctx.arc(px, py, 6, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.fill();
 
-  ctx.beginPath();
-  values.forEach((val, i) => {
-    const r = radius * val;
-    const x = cx + Math.cos(axes[i].angle) * r;
-    const y = cy + Math.sin(axes[i].angle) * r;
-    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
-  });
-  ctx.closePath();
-  ctx.fillStyle = 'rgba(96,165,250,.22)';
-  ctx.strokeStyle = '#93c5fd';
-  ctx.lineWidth = 3;
-  ctx.fill();
-  ctx.stroke();
+        const lx = cx + Math.cos(p.angle) * (r + 28);
+        const ly = cy + Math.sin(p.angle) * (r + 28);
+        ctx.fillStyle = "#e5e7eb";
+        ctx.font = "12px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText(`${p.label}: ${p.value}`, lx, ly);
+      });
+    }
 
-  values.forEach((val, i) => {
-    const r = radius * val;
-    const x = cx + Math.cos(axes[i].angle) * r;
-    const y = cy + Math.sin(axes[i].angle) * r;
-    ctx.beginPath();
-    ctx.arc(x, y, 5, 0, Math.PI*2);
-    ctx.fillStyle = colors[i];
-    ctx.fill();
-  });
-}
+    function generateProfile(){
+      const data = getAnswers();
 
-function render(){
-  const answers = getAnswers();
-  updateAnswerBox(answers);
-  const unanswered = answers.map((v,i)=> v ? null : i+1).filter(Boolean);
-  if(unanswered.length){
-    statusEl.textContent = `Answer all questions first. Missing: ${unanswered.join(', ')}`;
-    return;
-  }
-  const scores = calcScores(answers);
-  document.getElementById('scoreA').textContent = `${scores.A}/20`;
-  document.getElementById('scoreB').textContent = `${scores.B}/20`;
-  document.getElementById('scoreC').textContent = `${scores.C}/20`;
+      if (data.complete < qs.length) {
+        showCallout(`Please answer all 20 questions first. You have completed ${data.complete} of 20.`);
+        return;
+      }
 
-  document.getElementById('barA').style.width = percent(scores.A) + '%';
-  document.getElementById('barB').style.width = percent(scores.B) + '%';
-  document.getElementById('barC').style.width = percent(scores.C) + '%';
+      const profile = interpret(data.A, data.B, data.C);
 
-  drawRadar(scores);
-  summaryEl.innerHTML = classify(scores);
-  statusEl.textContent = 'Profile generated.';
-  saveToUrl(answers);
-}
+      updateScoreCards(data.A, data.B, data.C);
+      renderSummary(data, profile);
+      drawChart(data.A, data.B, data.C);
+      answersBox.value = buildOutput(data, profile);
+      showCallout("Profile generated. You can now copy the output.", false);
+    }
 
-function resetForm(){
-  document.querySelectorAll('input[type="radio"]').forEach(el => el.checked = false);
-  updateAnswerBox(Array(questions.length).fill(""));
-  document.getElementById('scoreA').textContent = '0';
-  document.getElementById('scoreB').textContent = '0';
-  document.getElementById('scoreC').textContent = '0';
-  document.getElementById('barA').style.width = '0%';
-  document.getElementById('barB').style.width = '0%';
-  document.getElementById('barC').style.width = '0%';
-  summaryEl.textContent = 'Complete the questionnaire, then generate the profile.';
-  statusEl.textContent = 'Reset complete.';
-  history.replaceState({}, '', window.location.pathname);
-  drawRadar({A:0,B:0,C:0});
-}
+    async function copyOutput(){
+      const text = answersBox.value.trim();
+      if (!text) {
+        showCallout("Generate a profile first, then copy the output.");
+        return;
+      }
 
-async function copyAnswers(){
-  updateAnswerBox(getAnswers());
-  try{
-    await navigator.clipboard.writeText(answerBox.value);
-    statusEl.textContent = 'Answers copied.';
-  } catch {
-    answerBox.select();
-    document.execCommand('copy');
-    statusEl.textContent = 'Answers copied.';
-  }
-}
+      try {
+        await navigator.clipboard.writeText(text);
+        showCallout("Copied to clipboard.", false);
+      } catch {
+        showCallout("Copy failed in this browser. Select the text and copy it manually.");
+      }
+    }
 
-function saveToUrl(answers){
-  const joined = answers.join('');
-  const url = new URL(window.location.href);
-  url.searchParams.set('answers', joined);
-  history.replaceState({}, '', url.toString());
-}
+    function resetAll(){
+      document.querySelectorAll('input[type="radio"]').forEach(el => el.checked = false);
+      answersBox.value = "";
+      updateScoreCards(0, 0, 0);
+      summaryBox.innerHTML = `<h3>Profile summary</h3><p class="muted">Complete the questionnaire, then press Generate Profile.</p>`;
+      drawChart(0, 0, 0);
+      updateProgress();
+      hideCallout();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
 
-async function copyLink(){
-  const answers = getAnswers();
-  const filled = answers.every(Boolean);
-  if(filled) saveToUrl(answers);
-  try{
-    await navigator.clipboard.writeText(window.location.href);
-    statusEl.textContent = filled ? 'Shareable link copied with answers included.' : 'Link copied.';
-  } catch {
-    statusEl.textContent = 'Could not copy link automatically.';
-  }
-}
+    document.getElementById("generateBtn").addEventListener("click", generateProfile);
+    document.getElementById("copyBtn").addEventListener("click", copyOutput);
+    document.getElementById("resetBtn").addEventListener("click", resetAll);
 
-function loadFromUrl(){
-  const url = new URL(window.location.href);
-  const ans = (url.searchParams.get('answers') || '').trim().toUpperCase();
-  if(ans.length === questions.length){
-    [...ans].forEach((ch, i) => {
-      const el = document.querySelector(`input[name="q${i+1}"][value="${ch}"]`);
-      if(el) el.checked = true;
-    });
-    updateAnswerBox(getAnswers());
-    render();
-  } else {
-    drawRadar({A:0,B:0,C:0});
-  }
-}
-
-document.getElementById('calcBtn').addEventListener('click', render);
-document.getElementById('resetBtn').addEventListener('click', resetForm);
-document.getElementById('copyBtn').addEventListener('click', copyAnswers);
-document.getElementById('copyLinkBtn').addEventListener('click', copyLink);
-
-loadFromUrl();
-</script>
+    renderQuestions();
+    updateProgress();
+    updateScoreCards(0, 0, 0);
+    drawChart(0, 0, 0);
+  </script>
 </body>
 </html>
