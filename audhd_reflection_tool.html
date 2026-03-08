@@ -72,7 +72,7 @@
     .sub{
       margin:0;
       color:var(--muted);
-      max-width:820px;
+      max-width:860px;
       font-size:15px;
     }
 
@@ -100,19 +100,12 @@
       align-self:start;
     }
 
-    .topbar{
-      display:grid;
-      grid-template-columns:1fr auto;
-      gap:14px;
-      align-items:center;
-      margin-bottom:16px;
-    }
-
     .progressCard{
       border:1px solid var(--border);
       background:rgba(8,17,31,.8);
       border-radius:16px;
       padding:12px 14px;
+      margin-bottom:16px;
     }
 
     .progressMeta{
@@ -139,29 +132,6 @@
       transition:width .2s ease;
     }
 
-    .btns{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-    }
-
-    button{
-      appearance:none;
-      border:none;
-      cursor:pointer;
-      border-radius:12px;
-      padding:12px 16px;
-      font-weight:700;
-      font-size:14px;
-      transition:transform .12s ease, opacity .12s ease;
-    }
-
-    button:hover{transform:translateY(-1px)}
-    button:active{transform:translateY(0)}
-    .primary{background:linear-gradient(90deg, var(--blue), var(--blue2)); color:#061120}
-    .secondary{background:#dbeafe; color:#0b1220}
-    .ghost{background:transparent; color:var(--text); border:1px solid var(--border)}
-
     .sectionTitle{
       margin:0 0 10px;
       font-size:18px;
@@ -186,8 +156,14 @@
     }
 
     .q h3{
-      margin:0 0 12px;
+      margin:0 0 6px;
       font-size:16px;
+    }
+
+    .context{
+      margin:0 0 12px;
+      color:var(--muted);
+      font-size:13px;
     }
 
     .opts{
@@ -221,11 +197,36 @@
       min-width:22px;
     }
 
+    .bottomActions{
+      margin-top:18px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      justify-content:flex-start;
+    }
+
+    button{
+      appearance:none;
+      border:none;
+      cursor:pointer;
+      border-radius:12px;
+      padding:12px 16px;
+      font-weight:700;
+      font-size:14px;
+      transition:transform .12s ease, opacity .12s ease;
+    }
+
+    button:hover{transform:translateY(-1px)}
+    button:active{transform:translateY(0)}
+    .primary{background:linear-gradient(90deg, var(--blue), var(--blue2)); color:#061120}
+    .secondary{background:#dbeafe; color:#0b1220}
+    .ghost{background:transparent; color:var(--text); border:1px solid var(--border)}
+
     .scoreGrid{
       display:grid;
       grid-template-columns:repeat(3,1fr);
       gap:10px;
-      margin:12px 0 16px;
+      margin:0 0 16px;
     }
 
     .scoreCard{
@@ -319,9 +320,15 @@
       font-size:16px;
     }
 
+    .share p{
+      margin:0 0 10px;
+      color:var(--muted);
+      font-size:13px;
+    }
+
     textarea{
       width:100%;
-      min-height:240px;
+      min-height:180px;
       border:1px solid var(--border);
       border-radius:14px;
       background:#020617;
@@ -331,12 +338,13 @@
       font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
       font-size:13px;
       line-height:1.45;
+      margin-bottom:10px;
     }
 
-    .foot{
-      color:var(--muted);
-      font-size:12px;
-      margin-top:12px;
+    .copyRow{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
     }
 
     .friendBox{
@@ -365,17 +373,22 @@
       font-size:14px;
     }
 
+    .foot{
+      color:var(--muted);
+      font-size:12px;
+      margin-top:12px;
+    }
+
     @media (max-width: 940px){
       .layout{grid-template-columns:1fr}
       .right{position:static}
-      .topbar{grid-template-columns:1fr}
     }
 
     @media (max-width: 560px){
       .scoreGrid{grid-template-columns:1fr}
       .hero,.left,.right{padding:16px}
+      .bottomActions,.copyRow{display:grid}
       button{width:100%}
-      .btns{display:grid}
     }
   </style>
 </head>
@@ -385,34 +398,31 @@
       <div class="eyebrow">Pattern reflection only</div>
       <h1>AuDHD Reflection Tool</h1>
       <p class="sub">
-        Answer all 20 questions with A, B, or C. The tool will generate a visual profile, a plain-English summary, and a clean copy-paste output you can share or drop into an AI prompt.
+        Answer based on your usual pattern across most of your life, not your best day or worst day. Pick the option that feels most consistently true. This is for reflection, not diagnosis.
       </p>
     </section>
 
     <div class="layout">
       <section class="panel left">
-        <div class="topbar">
-          <div class="progressCard">
-            <div class="progressMeta">
-              <span id="progressLabel">0 of 20 answered</span>
-              <span id="progressPct">0%</span>
-            </div>
-            <div class="progress">
-              <div class="progressFill" id="progressFill"></div>
-            </div>
+        <div class="progressCard">
+          <div class="progressMeta">
+            <span id="progressLabel">0 of 20 answered</span>
+            <span id="progressPct">0%</span>
           </div>
-
-          <div class="btns">
-            <button type="button" class="primary" id="generateBtn">Generate Profile</button>
-            <button type="button" class="secondary" id="copyBtn">Copy Output</button>
-            <button type="button" class="ghost" id="resetBtn">Reset</button>
+          <div class="progress">
+            <div class="progressFill" id="progressFill"></div>
           </div>
         </div>
 
         <h2 class="sectionTitle">Questionnaire</h2>
-        <p class="help">Pick one answer per question. A and B represent stronger single-direction traits. C reflects overlap or mixed presentation.</p>
+        <p class="help">Think about what usually happens without a lot of effort, masking, coping systems, or reminders from other people.</p>
 
         <div class="questions" id="form"></div>
+
+        <div class="bottomActions">
+          <button type="button" class="primary" id="generateBtn">Generate Profile</button>
+          <button type="button" class="ghost" id="resetBtn">Reset</button>
+        </div>
       </section>
 
       <aside class="panel right">
@@ -444,18 +454,40 @@
         </div>
 
         <div class="share">
-          <h3>Copy-paste output</h3>
-          <textarea id="answers" placeholder="Your results will appear here"></textarea>
+          <h3>Results summary</h3>
+          <p>A clean summary for notes, messages, or sharing.</p>
+          <textarea id="summaryOutput" placeholder="Your profile summary will appear here"></textarea>
+          <div class="copyRow">
+            <button type="button" class="secondary" id="copySummaryBtn">Copy Summary</button>
+          </div>
+        </div>
+
+        <div class="share">
+          <h3>Answers only</h3>
+          <p>Fast copy-paste list of answers.</p>
+          <textarea id="answersOnlyOutput" placeholder="Your answers will appear here"></textarea>
+          <div class="copyRow">
+            <button type="button" class="secondary" id="copyAnswersBtn">Copy Answers</button>
+          </div>
+        </div>
+
+        <div class="share">
+          <h3>AI prompt export</h3>
+          <p>Paste this into an AI tool to get interpretation and practical guidance.</p>
+          <textarea id="aiPromptOutput" placeholder="Your AI prompt export will appear here"></textarea>
+          <div class="copyRow">
+            <button type="button" class="secondary" id="copyAIBtn">Copy AI Prompt</button>
+          </div>
         </div>
 
         <div class="friendBox">
-          <h3>How to use this</h3>
-          <p>This is for reflection, not diagnosis.</p>
+          <h3>How to answer well</h3>
+          <p>Use the pattern that fits most often.</p>
           <ol class="mini">
-            <li>Answer all 20 questions.</li>
-            <li>Press Generate Profile.</li>
-            <li>Press Copy Output.</li>
-            <li>Paste the output into your notes or an AI prompt for interpretation.</li>
+            <li>Think about your default state, not your ideal self.</li>
+            <li>Think across school, work, home, and relationships.</li>
+            <li>If two answers fit often, choose C when it truly feels like both.</li>
+            <li>If you built systems to cope, answer for what happens underneath those systems.</li>
           </ol>
         </div>
 
@@ -468,47 +500,176 @@
 
   <script>
     const qs = [
-      ["When given instructions", "Forget steps", "Need precise structure", "Both"],
-      ["When plans suddenly change", "Adapt easily", "Change causes stress", "Dislike change but dislike rigid schedules"],
-      ["In conversation", "Interrupt or jump topics", "Analyse social rules", "Both"],
-      ["With routines", "Struggle to maintain them", "Strongly prefer them", "Want them but abandon them"],
-      ["Sensory environments", "Rarely bother me", "Overwhelm me", "Drain me over time"],
-      ["Interests", "Jump between interests", "Deep long-term interests", "Intense interests that rotate"],
-      ["Vague communication", "Fine with it", "Prefer direct literal language", "Understand but draining"],
-      ["Attention", "Jumps quickly", "Deep absorption", "Both"],
-      ["After conversations", "Move on quickly", "Analyse interactions", "Analyse sometimes"],
-      ["Starting tasks", "Struggle to start", "Need structure", "Both"],
-      ["Social interaction", "Draining due to boredom", "Draining due to processing", "Both"],
-      ["Learning topics", "Skim broadly", "Deep structured learning", "Deep across topics"],
-      ["Rules and systems", "Miss details", "Need logical consistency", "Both"],
-      ["Emotional reactions", "Rise quickly", "Build slowly", "Hard to regulate"],
-      ["Organisation", "Chaos appears", "Prefer structure", "Build systems then stop"],
-      ["Focus on interesting tasks", "Distracted later", "Absorbed for hours", "Hyperfocus"],
-      ["Reading facial expressions", "Automatic", "Difficult", "Conscious effort"],
-      ["Busy environments", "Distracting", "Overwhelming", "Draining"],
-      ["Planning the day", "Lose priorities", "Prefer schedules", "Plan but fail to follow"],
-      ["Overall challenge", "Attention", "Sensory or social load", "Mixture"]
+      {
+        q: "When given instructions",
+        context: "Think about verbal instructions, meeting actions, or multi-step tasks. What usually happens before you write it down or build a system around it?",
+        a: "I often lose steps, forget parts, or start before I have the full sequence.",
+        b: "I need the steps to be clear and precise or I feel uncertain.",
+        c: "I need clarity, but I also still lose steps or drift off track."
+      },
+      {
+        q: "When plans suddenly change",
+        context: "Think about cancelled plans, changed meeting times, new priorities, or unexpected detours.",
+        a: "I usually roll with it without much stress.",
+        b: "It throws me off and I need time to adjust.",
+        c: "I dislike the change, but I also dislike being locked into rigid plans."
+      },
+      {
+        q: "In conversation",
+        context: "Think about everyday chats, work meetings, and group settings.",
+        a: "I interrupt, jump ahead, or shift topics quickly.",
+        b: "I spend effort working out social rules, tone, or timing.",
+        c: "I do both of those things."
+      },
+      {
+        q: "With routines",
+        context: "Think about sleep, meals, work rituals, exercise, or personal admin.",
+        a: "I struggle to keep routines going consistently.",
+        b: "I strongly prefer routines and feel better when they stay stable.",
+        c: "I want routines and often build them, but I struggle to keep them."
+      },
+      {
+        q: "In sensory environments",
+        context: "Think about noise, bright lights, crowds, scratchy clothing, smells, or busy rooms.",
+        a: "They usually do not affect me much.",
+        b: "They can feel overwhelming quite quickly.",
+        c: "I can manage for a while, but they drain me over time."
+      },
+      {
+        q: "With interests",
+        context: "Think about hobbies, research topics, shows, collections, or deep dives.",
+        a: "I jump from one interest to another.",
+        b: "I tend to keep deep long-term interests.",
+        c: "I get intense interests, but they rotate."
+      },
+      {
+        q: "When communication is vague",
+        context: "Think about unclear requests like 'what are your thoughts?' or broad social hints.",
+        a: "I usually cope fine and fill in the gaps.",
+        b: "I prefer direct, literal, clear language.",
+        c: "I can work it out, but it takes effort and drains me."
+      },
+      {
+        q: "With attention",
+        context: "Think about work, study, chores, hobbies, and conversations.",
+        a: "My attention jumps around quickly.",
+        b: "I can get deeply absorbed in one thing.",
+        c: "Both happen a lot for me."
+      },
+      {
+        q: "After conversations",
+        context: "Think about replaying things after social or work interactions.",
+        a: "I usually move on quickly.",
+        b: "I analyse what happened, what I said, and what others meant.",
+        c: "I do that sometimes, especially if the interaction felt unclear."
+      },
+      {
+        q: "When starting tasks",
+        context: "Think about boring tasks, admin, emails, or anything with low interest.",
+        a: "Starting is hard, even when I know it matters.",
+        b: "I need clear structure before I can start well.",
+        c: "I need structure and I still struggle to start."
+      },
+      {
+        q: "With social interaction",
+        context: "Think about the kind of tired you feel after being around people.",
+        a: "Social time tires me because I get bored, restless, or under-stimulated.",
+        b: "Social time tires me because of processing, masking, or social effort.",
+        c: "Both of those happen."
+      },
+      {
+        q: "When learning new topics",
+        context: "Think about how you naturally explore ideas, not how you were taught to study.",
+        a: "I skim broadly and jump across topics.",
+        b: "I prefer deep, structured learning in one area.",
+        c: "I go very deep, but often across multiple linked topics."
+      },
+      {
+        q: "With rules and systems",
+        context: "Think about policies, instructions, processes, games, or social rules.",
+        a: "I miss details or skip parts by accident.",
+        b: "I want rules and systems to be logical and consistent.",
+        c: "I notice inconsistency, but I also still miss or skip parts."
+      },
+      {
+        q: "With emotional reactions",
+        context: "Think about frustration, shame, overwhelm, rejection, or sudden stress.",
+        a: "My reactions rise quickly and hit hard.",
+        b: "They build more slowly and steadily.",
+        c: "My reactions can be hard to regulate once they start."
+      },
+      {
+        q: "With organisation",
+        context: "Think about your desk, inbox, life admin, home systems, or task lists.",
+        a: "Things often become messy or chaotic around me.",
+        b: "I prefer structure and order.",
+        c: "I build good systems, but I do not always maintain them."
+      },
+      {
+        q: "When something is interesting",
+        context: "Think about hobbies, urgent research, games, or work you care about.",
+        a: "I get pulled off later even if I start strong.",
+        b: "I can stay absorbed for hours.",
+        c: "I can hyperfocus hard and lose track of time or needs."
+      },
+      {
+        q: "Reading facial expressions and social cues",
+        context: "Think about tone, mood, implied meaning, and non-verbal signals.",
+        a: "I usually read them automatically.",
+        b: "I often find them hard to read.",
+        c: "I can read them, but it takes conscious effort."
+      },
+      {
+        q: "In busy environments",
+        context: "Think about shopping centres, open-plan offices, schools, airports, or family gatherings.",
+        a: "They distract me.",
+        b: "They overwhelm me.",
+        c: "They wear me down, even if I seem fine at first."
+      },
+      {
+        q: "When planning the day",
+        context: "Think about setting priorities and following through, not only making lists.",
+        a: "I lose sight of priorities or get pulled into whatever is loudest.",
+        b: "I prefer a schedule and feel better with one.",
+        c: "I make plans, but I often do not follow them the way I meant to."
+      },
+      {
+        q: "Overall, which feels hardest most often",
+        context: "Pick the broad pattern that best describes your day-to-day friction.",
+        a: "Attention, initiation, follow-through, or lost steps.",
+        b: "Sensory load, social processing, change, or predictability.",
+        c: "A real mixture of both."
+      }
     ];
 
     const form = document.getElementById("form");
-    const answersBox = document.getElementById("answers");
     const callout = document.getElementById("callout");
     const summaryBox = document.getElementById("summaryBox");
+    const summaryOutput = document.getElementById("summaryOutput");
+    const answersOnlyOutput = document.getElementById("answersOnlyOutput");
+    const aiPromptOutput = document.getElementById("aiPromptOutput");
 
     function renderQuestions(){
       form.innerHTML = "";
-      qs.forEach((q, i) => {
+      qs.forEach((item, i) => {
         const card = document.createElement("div");
         card.className = "q";
         card.innerHTML = `
-          <h3>${i + 1}. ${q[0]}</h3>
+          <h3>${i + 1}. ${item.q}</h3>
+          <p class="context">${item.context}</p>
           <div class="opts">
-            ${["A","B","C"].map((v, j) => `
-              <label class="opt">
-                <input type="radio" name="q${i}" value="${v}">
-                <strong>${v}</strong> ${q[j + 1]}
-              </label>
-            `).join("")}
+            <label class="opt">
+              <input type="radio" name="q${i}" value="A">
+              <strong>A</strong> ${item.a}
+            </label>
+            <label class="opt">
+              <input type="radio" name="q${i}" value="B">
+              <strong>B</strong> ${item.b}
+            </label>
+            <label class="opt">
+              <input type="radio" name="q${i}" value="C">
+              <strong>C</strong> ${item.c}
+            </label>
           </div>
         `;
         form.appendChild(card);
@@ -520,7 +681,7 @@
       let A = 0, B = 0, C = 0, complete = 0;
       const list = [];
 
-      qs.forEach((q, i) => {
+      qs.forEach((item, i) => {
         const picked = document.querySelector(`input[name="q${i}"]:checked`);
         const value = picked ? picked.value : "";
         if (value) complete++;
@@ -542,10 +703,10 @@
       hideCallout();
     }
 
-    function showCallout(msg, danger = true){
+    function showCallout(msg, isError = true){
       callout.textContent = msg;
       callout.style.display = "block";
-      if (danger) {
+      if (isError) {
         callout.style.borderColor = "rgba(239,68,68,.35)";
         callout.style.background = "rgba(239,68,68,.12)";
         callout.style.color = "#fecaca";
@@ -572,11 +733,11 @@
       if (C >= 8 && C >= A && C >= B) {
         return {
           title: "Strong overlap pattern",
-          text: "Your answers lean toward an overlapping AuDHD-style pattern. This often shows up as wanting structure but struggling to keep it, shifting between distraction and deep absorption, and carrying both attention friction and sensory or social strain.",
+          text: "Your answers lean toward an overlapping AuDHD-style pattern. This often shows up as wanting structure but struggling to hold it, shifting between distraction and deep absorption, and carrying both attention friction and sensory or social strain.",
           notes: [
             "Mixed presentation is the main feature.",
-            "Tension between flexibility and structure is likely.",
-            "Support usually works best when it reduces friction without becoming rigid."
+            "There is often tension between flexibility and structure.",
+            "Support works best when it reduces friction without becoming too rigid."
           ]
         };
       }
@@ -584,11 +745,11 @@
       if (A === strongest && A >= 8) {
         return {
           title: "ADHD-leaning pattern",
-          text: "Your answers lean more toward an ADHD-style pattern. This often shows up as difficulty starting, losing steps, jumping attention, forgetting priorities, and needing external structure to stay on track.",
+          text: "Your answers lean more toward an ADHD-style pattern. This often shows up as lost steps, difficulty starting, jumping attention, time drift, and needing external structure to stay on track.",
           notes: [
             "Initiation and working memory are likely pain points.",
             "Interest often drives focus more than importance.",
-            "Visible prompts and short action steps tend to help."
+            "Visible prompts and small next steps tend to help."
           ]
         };
       }
@@ -596,27 +757,39 @@
       if (B === strongest && B >= 8) {
         return {
           title: "Autism-leaning pattern",
-          text: "Your answers lean more toward an autism-style pattern. This often shows up as higher need for consistency, social processing effort, change friction, and stronger impact from sensory or environment load.",
+          text: "Your answers lean more toward an autism-style pattern. This often shows up as stronger need for clarity and predictability, social processing effort, change friction, and more sensory impact.",
           notes: [
             "Predictability likely reduces stress.",
-            "Literal and direct communication tends to help.",
-            "Energy drain may come from processing, not lack of interest."
+            "Direct and literal communication tends to help.",
+            "Energy drain may come from processing effort, not lack of interest."
           ]
         };
       }
 
       return {
         title: "Mixed or balanced pattern",
-        text: "Your answers are fairly mixed. This suggests a lower-contrast or blended profile across these reflection areas. The detail of each answer matters more than the total counts alone.",
+        text: "Your answers are fairly mixed. This suggests a lower-contrast or blended profile across these areas. The pattern in each answer matters more than the totals alone.",
         notes: [
-          "Review the individual answers, not only the totals.",
-          "Specific friction points may matter more than profile label.",
+          "Review the specific answers, not only the totals.",
+          "Single friction points may matter more than a label.",
           "Support should target the daily problems you notice most."
         ]
       };
     }
 
-    function buildOutput(data, profile){
+    function renderSummary(data, profile){
+      summaryBox.innerHTML = `
+        <h3>${profile.title}</h3>
+        <p>${profile.text}</p>
+        <p><strong>Totals</strong><br>
+        ADHD-style: ${data.A}/20<br>
+        Autism-style: ${data.B}/20<br>
+        Overlap: ${data.C}/20</p>
+        <p class="muted">${profile.notes.join("<br>")}</p>
+      `;
+    }
+
+    function buildSummaryOutput(data, profile){
       return [
         "AuDHD Reflection Questionnaire Results",
         "",
@@ -632,25 +805,31 @@
         `- ${profile.notes[1]}`,
         `- ${profile.notes[2]}`,
         "",
-        "Answers:",
-        ...data.list,
-        "",
         "Note: Pattern reflection only. Not diagnostic."
       ].join("\n");
     }
 
-    function renderSummary(data, profile){
-      summaryBox.innerHTML = `
-        <h3>${profile.title}</h3>
-        <p>${profile.text}</p>
-        <p><strong>Totals</strong><br>
-        ADHD-style: ${data.A}/20<br>
-        Autism-style: ${data.B}/20<br>
-        Overlap: ${data.C}/20</p>
-        <p class="muted">
-          ${profile.notes.join("<br>")}
-        </p>
-      `;
+    function buildAnswersOnlyOutput(data){
+      return data.list.join("\n");
+    }
+
+    function buildAIPromptOutput(data){
+      return [
+        "Analyze these AuDHD questionnaire results.",
+        "",
+        "Provide:",
+        "1. Pattern likelihood for ADHD traits, autism traits, or AuDHD overlap.",
+        "2. Reasoning based on answer patterns.",
+        "3. Likely strengths this cognitive profile brings.",
+        "4. Common friction points.",
+        "5. Practical strategies that may help.",
+        "6. A short plain-English summary I could share with someone else.",
+        "",
+        "Answers:",
+        ...data.list,
+        "",
+        `Totals: A=${data.A}, B=${data.B}, C=${data.C}`
+      ].join("\n");
     }
 
     function drawChart(A, B, C){
@@ -733,22 +912,26 @@
       const profile = interpret(data.A, data.B, data.C);
 
       updateScoreCards(data.A, data.B, data.C);
-      renderSummary(data, profile);
       drawChart(data.A, data.B, data.C);
-      answersBox.value = buildOutput(data, profile);
-      showCallout("Profile generated. You can now copy the output.", false);
+      renderSummary(data, profile);
+
+      summaryOutput.value = buildSummaryOutput(data, profile);
+      answersOnlyOutput.value = buildAnswersOnlyOutput(data);
+      aiPromptOutput.value = buildAIPromptOutput(data);
+
+      showCallout("Profile generated. Your outputs are ready to copy.", false);
+      document.querySelector(".right").scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
-    async function copyOutput(){
-      const text = answersBox.value.trim();
-      if (!text) {
+    async function copyText(text, successMsg){
+      if (!text.trim()) {
         showCallout("Generate a profile first, then copy the output.");
         return;
       }
 
       try {
         await navigator.clipboard.writeText(text);
-        showCallout("Copied to clipboard.", false);
+        showCallout(successMsg, false);
       } catch {
         showCallout("Copy failed in this browser. Select the text and copy it manually.");
       }
@@ -756,18 +939,22 @@
 
     function resetAll(){
       document.querySelectorAll('input[type="radio"]').forEach(el => el.checked = false);
-      answersBox.value = "";
-      updateScoreCards(0, 0, 0);
-      summaryBox.innerHTML = `<h3>Profile summary</h3><p class="muted">Complete the questionnaire, then press Generate Profile.</p>`;
-      drawChart(0, 0, 0);
       updateProgress();
+      updateScoreCards(0, 0, 0);
+      drawChart(0, 0, 0);
+      summaryBox.innerHTML = `<h3>Profile summary</h3><p class="muted">Complete the questionnaire, then press Generate Profile.</p>`;
+      summaryOutput.value = "";
+      answersOnlyOutput.value = "";
+      aiPromptOutput.value = "";
       hideCallout();
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     document.getElementById("generateBtn").addEventListener("click", generateProfile);
-    document.getElementById("copyBtn").addEventListener("click", copyOutput);
     document.getElementById("resetBtn").addEventListener("click", resetAll);
+    document.getElementById("copySummaryBtn").addEventListener("click", () => copyText(summaryOutput.value, "Summary copied to clipboard."));
+    document.getElementById("copyAnswersBtn").addEventListener("click", () => copyText(answersOnlyOutput.value, "Answers copied to clipboard."));
+    document.getElementById("copyAIBtn").addEventListener("click", () => copyText(aiPromptOutput.value, "AI prompt copied to clipboard."));
 
     renderQuestions();
     updateProgress();
