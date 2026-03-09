@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AuDHD Reflection Tool</title>
+  <style>
+    :root{
+      --bg:#08111f;
+      --bg2:#0f172a;
+      --panel:#111c2e;
+      --panel2:#0b1220;
+      --border:#2a3a52;
+      --text:#e5e7eb;
+      --muted:#9aa8bc;
+      --blue:#60a5fa;
+      --blue2:#38bdf8;
+      --amber:#f59e0b;
+      --green:#22c55e;
+      --violet:#a78bfa;
+      --slate:#94a3b8;
+      --danger:#ef4444;
+      --shadow:0 10px 30px rgba(0,0,0,.28);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(56,189,248,.12), transparent 24%),
+        radial-gradient(circle at top right, rgba(96,165,250,.10), transparent 22%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
+      line-height:1.45;
+    }
+
+    .wrap{max-width:1200px;margin:0 auto;padding:20px 16px 48px}
+    .hero,.panel{
+      border:1px solid var(--border);
+      background:linear-gradient(180deg, rgba(17,28,46,.97), rgba(11,18,32,.96));
+      border-radius:22px;
+      box-shadow:var(--shadow);
+    }
+    .hero{padding:24px;margin-bottom:18px}
+    .eyebrow{
+      display:inline-block;
+      font-size:12px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:#bfdbfe;
+      background:rgba(96,165,250,.12);
+      border:1px solid rgba(96,165,250,.25);
+      padding:6px 10px;
+      border-radius:999px;
+      margin-bottom:10px;
+    }
+    h1{margin:0 0 8px;font-size:clamp(30px,4vw,46px);line-height:1.05}
+    .sub{margin:0;color:var(--muted);max-width:920px;font-size:15px}
+    .layout{display:grid;grid-template-columns:1.2fr .8fr;gap:18px}
+    .left,.right{padding:18px}
+    .right{position:sticky;top:16px;align-self:start}
+
+    .progressCard,.summary,.share,.friendBox,.insightBox,.callout,.scoreCard,.q{
+      border:1px solid var(--border);
+      border-radius:16px;
+      background:#09111f;
+    }
+    .progressCard,.summary,.share,.friendBox,.insightBox,.callout{padding:14px}
+    .progressCard{margin-bottom:16px}
+    .progressMeta{display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:13px;margin-bottom:8px}
+    .progress{height:12px;border-radius:999px;overflow:hidden;background:#060c17;border:1px solid #213049}
+    .progressFill{height:100%;width:0%;background:linear-gradient(90deg, var(--blue), var(--blue2));transition:width .2s ease}
+    .sectionTitle{margin:0 0 10px;font-size:18px}
+    .help{margin:0 0 14px;color:var(--muted);font-size:14px}
+    .questions{display:grid;gap:14px}
+    .q{padding:14px}
+    .q h3{margin:0 0 6px;font-size:16px}
+    .context{margin:0 0 12px;color:var(--muted);font-size:13px}
+    .opts{display:grid;gap:8px}
+    .opt{
+      display:block;
+      border:1px solid var(--border);
+      border-radius:12px;
+      background:#08111f;
+      padding:11px 12px;
+      cursor:pointer;
+      transition:border-color .14s ease, transform .14s ease, background .14s ease;
+    }
+    .opt:hover{border-color:#45607f;transform:translateY(-1px);background:#0b1526}
+    .opt input{margin-right:8px;accent-color:var(--blue)}
+    .opt strong{display:inline-block;min-width:22px}
+    .legend{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:10px;
+      margin:0 0 16px;
+    }
+    .legendCard{
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:10px;
+      background:#09111f;
+      font-size:12px;
+    }
+    .legendCard strong{display:block;margin-bottom:4px;font-size:14px}
+    .bottomActions,.copyRow{display:flex;flex-wrap:wrap;gap:10px}
+    .bottomActions{margin-top:18px}
+    button{
+      appearance:none;border:none;cursor:pointer;border-radius:12px;padding:12px 16px;
+      font-weight:700;font-size:14px;transition:transform .12s ease, opacity .12s ease;
+    }
+    button:hover{transform:translateY(-1px)}
+    button:active{transform:translateY(0)}
+    .primary{background:linear-gradient(90deg, var(--blue), var(--blue2)); color:#061120}
+    .secondary{background:#dbeafe; color:#0b1220}
+    .ghost{background:transparent; color:var(--text); border:1px solid var(--border)}
+
+    .scoreGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:0 0 16px}
+    .scoreCard{padding:14px;text-align:center}
+    .scoreCard .label{font-size:12px;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em}
+    .scoreCard .value{font-size:28px;font-weight:800;line-height:1;margin-bottom:6px}
+    .scoreCard .small{font-size:12px;color:var(--muted)}
+    .adhd .value{color:var(--amber)}
+    .autism .value{color:var(--green)}
+    .overlap .value{color:var(--blue)}
+    .lowtraits .value{color:var(--violet)}
+
+    canvas{
+      width:100%;
+      max-width:360px;
+      height:auto;
+      display:block;
+      margin:0 auto 14px;
+      border:1px solid var(--border);
+      border-radius:18px;
+      background:#08111f;
+      padding:10px;
+    }
+
+    .summary h3,.share h3,.friendBox h3,.insightBox h3{margin:0 0 8px;font-size:16px}
+    .summary p,.friendBox p,.insightBox p{margin:0 0 10px;font-size:14px}
+    .share p{margin:0 0 10px;color:var(--muted);font-size:13px}
+    .muted{color:var(--muted)}
+    .callout{display:none;margin-bottom:14px;font-size:14px}
+    textarea{
+      width:100%;min-height:180px;border:1px solid var(--border);border-radius:14px;background:#020617;
+      color:var(--text);padding:12px;resize:vertical;font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size:13px;line-height:1.45;margin-bottom:10px;
+    }
+    .mini{margin:0;padding-left:18px;color:var(--text);font-size:14px}
+    .pillRow{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 0}
+    .pill{
+      display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid var(--border);
+      background:#08111f;font-size:12px;color:var(--text)
+    }
+    .foot{color:var(--muted);font-size:12px;margin-top:12px}
+
+    @media (max-width: 980px){
+      .layout{grid-template-columns:1fr}
+      .right{position:static}
+    }
+    @media (max-width: 700px){
+      .scoreGrid,.legend{grid-template-columns:1fr 1fr}
+    }
+    @media (max-width: 560px){
+      .scoreGrid,.legend{grid-template-columns:1fr}
+      .hero,.left,.right{padding:16px}
+      .bottomActions,.copyRow{display:grid}
+      button{width:100%}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <div class="eyebrow">Pattern reflection only</div>
+      <h1>AuDHD Reflection Tool</h1>
+      <p class="sub">
+        Answer based on your usual pattern across most of your life, not your best day or worst day. Pick the option that feels most consistently true. This is for reflection, not diagnosis.
+      </p>
+    </section>
+
+    <div class="layout">
+      <section class="panel left">
+        <div class="progressCard">
+          <div class="progressMeta">
+            <span id="progressLabel">0 of 20 answered</span>
+            <span id="progressPct">0%</span>
+          </div>
+          <div class="progress">
+            <div class="progressFill" id="progressFill"></div>
+          </div>
+        </div>
+
+        <div class="legend">
+          <div class="legendCard"><strong>A</strong> ADHD-leaning pattern</div>
+          <div class="legendCard"><strong>B</strong> Autism-leaning pattern</div>
+          <div class="legendCard"><strong>C</strong> Combined or overlapping pattern</div>
+          <div class="legendCard"><strong>D</strong> Low visible traits in this situation</div>
+        </div>
+
+        <h2 class="sectionTitle">Questionnaire</h2>
+        <p class="help">Think about what usually happens without a lot of effort, masking, coping systems, or reminders from other people.</p>
+
+        <div class="questions" id="form"></div>
+
+        <div class="bottomActions">
+          <button type="button" class="primary" id="generateBtn">Generate Profile</button>
+          <button type="button" class="ghost" id="resetBtn">Reset</button>
+        </div>
+      </section>
+
+      <aside class="panel right">
+        <div class="callout" id="callout"></div>
+
+        <div class="scoreGrid">
+          <div class="scoreCard adhd">
+            <div class="label">ADHD-leaning</div>
+            <div class="value" id="scoreA">0</div>
+            <div class="small">out of 20</div>
+          </div>
+          <div class="scoreCard autism">
+            <div class="label">Autism-leaning</div>
+            <div class="value" id="scoreB">0</div>
+            <div class="small">out of 20</div>
+          </div>
+          <div class="scoreCard overlap">
+            <div class="label">Overlap</div>
+            <div class="value" id="scoreC">0</div>
+            <div class="small">out of 20</div>
+          </div>
+          <div class="scoreCard lowtraits">
+            <div class="label">Low visible traits</div>
+            <div class="value" id="scoreD">0</div>
+            <div class="small">out of 20</div>
+          </div>
+        </div>
+
+        <canvas id="profileChart" width="360" height="360" aria-label="Visual profile chart"></canvas>
+
+        <div class="summary" id="summaryBox">
+          <h3>Profile summary</h3>
+          <p class="muted">Complete the questionnaire, then press Generate Profile.</p>
+        </div>
+
+        <div class="insightBox" id="insightBox">
+          <h3>Interpretation notes</h3>
+          <p class="muted">This area will explain why the result was chosen, not only which letter scored highest.</p>
+        </div>
+
+        <div class="share">
+          <h3>Results summary</h3>
+          <p>A clean summary for notes, messages, or sharing.</p>
+          <textarea id="summaryOutput" placeholder="Your profile summary will appear here"></textarea>
+          <div class="copyRow">
+            <button type="button" class="secondary" id="copySummaryBtn">Copy Summary</button>
+          </div>
+        </div>
+
+        <div class="share">
+          <h3>Answers only</h3>
+          <p>Fast copy-paste list of answers.</p>
+          <textarea id="answersOnlyOutput" placeholder="Your answers will appear here"></textarea>
+          <div class="copyRow">
+            <button type="button" class="secondary" id="copyAnswersBtn">Copy Answers</button>
+          </div>
+        </div>
+
+        <div class="share">
+          <h3>AI prompt export</h3>
+          <p>Paste this into an AI tool to get interpretation and practical guidance.</p>
+          <textarea id="aiPromptOutput" placeholder="Your AI prompt export will appear here"></textarea>
+          <div class="copyRow">
+            <button type="button" class="secondary" id="copyAIBtn">Copy AI Prompt</button>
+          </div>
+        </div>
+
+        <div class="friendBox">
+          <h3>How to answer well</h3>
+          <p>Use the pattern that fits most often.</p>
+          <ol class="mini">
+            <li>Think about your default state, not your ideal self.</li>
+            <li>Think across school, work, home, and relationships.</li>
+            <li>If two answers fit often, choose C when it truly feels like both.</li>
+            <li>If you built systems to cope, answer for what happens underneath those systems.</li>
+            <li>D does not automatically mean neurotypical. It can also mean masking, support, familiar settings, or lower visible strain in that context.</li>
+          </ol>
+        </div>
+
+        <div class="foot">
+          This tool reflects answer patterns only. It does not diagnose ADHD, autism, or AuDHD.
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script src="questions.js"></script>
+  <script>
+    const form = document.getElementById("form");
+    const callout = document.getElementById("callout");
+    const summaryBox = document.getElementById("summaryBox");
+    const insightBox = document.getElementById("insightBox");
+    const summaryOutput = document.getElementById("summaryOutput");
+    const answersOnlyOutput = document.getElementById("answersOnlyOutput");
+    const aiPromptOutput = document.getElementById("aiPromptOutput");
+
+    function renderQuestions(){
+      form.innerHTML = "";
+      questions.forEach((item, i) => {
+        const card = document.createElement("div");
+        card.className = "q";
+        card.innerHTML = `
+          <h3>${i + 1}. ${item.q}</h3>
+          <p class="context">${item.context}</p>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="q${i}" value="A"><strong>A</strong> ${item.A}</label>
+            <label class="opt"><input type="radio" name="q${i}" value="B"><strong>B</strong> ${item.B}</label>
+            <label class="opt"><input type="radio" name="q${i}" value="C"><strong>C</strong> ${item.C}</label>
+            <label class="opt"><input type="radio" name="q${i}" value="D"><strong>D</strong> ${item.D}</label>
+          </div>
+        `;
+        form.appendChild(card);
+      });
+      form.addEventListener("change", updateProgress, { once:false });
+    }
+
+    function getAnswers(){
+      let A = 0, B = 0, C = 0, D = 0, complete = 0;
+      const list = [];
+      const raw = [];
+
+      questions.forEach((item, i) => {
+        const picked = document.querySelector(`input[name="q${i}"]:checked`);
+        const value = picked ? picked.value : "";
+        if (value) complete++;
+        if (value === "A") A++;
+        if (value === "B") B++;
+        if (value === "C") C++;
+        if (value === "D") D++;
+        list.push(`${i + 1}. ${value || "-"}`);
+        raw.push(value || "-");
+      });
+
+      return { A, B, C, D, complete, list, raw, total: questions.length };
+    }
+
+    function updateProgress(){
+      const { complete, total } = getAnswers();
+      const pct = Math.round((complete / total) * 100);
+      document.getElementById("progressLabel").textContent = `${complete} of ${total} answered`;
+      document.getElementById("progressPct").textContent = `${pct}%`;
+      document.getElementById("progressFill").style.width = `${pct}%`;
+      hideCallout();
+    }
+
+    function showCallout(msg, isError = true){
+      callout.textContent = msg;
+      callout.style.display = "block";
+      if (isError) {
+        callout.style.borderColor = "rgba(239,68,68,.35)";
+        callout.style.background = "rgba(239,68,68,.12)";
+        callout.style.color = "#fecaca";
+      } else {
+        callout.style.borderColor = "rgba(96,165,250,.35)";
+        callout.style.background = "rgba(96,165,250,.12)";
+        callout.style.color = "#dbeafe";
+      }
+    }
+
+    function hideCallout(){
+      callout.style.display = "none";
+    }
+
+    function updateScoreCards(A, B, C, D){
+      document.getElementById("scoreA").textContent = A;
+      document.getElementById("scoreB").textContent = B;
+      document.getElementById("scoreC").textContent = C;
+      document.getElementById("scoreD").textContent = D;
+    }
+
+    function pct(value, total){
+      return Math.round((value / total) * 100);
+    }
+
+    function rankScores(data){
+      return [
+        { label:"ADHD-leaning", key:"A", value:data.A },
+        { label:"Autism-leaning", key:"B", value:data.B },
+        { label:"Overlap", key:"C", value:data.C },
+        { label:"Low visible traits", key:"D", value:data.D }
+      ].sort((x, y) => y.value - x.value);
+    }
+
+    function interpret(data){
+      const { A, B, C, D, total } = data;
+      const pa = pct(A, total), pb = pct(B, total), pc = pct(C, total), pd = pct(D, total);
+      const ranked = rankScores(data);
+      const top = ranked[0];
+      const second = ranked[1];
+      const gap = top.value - second.value;
+      const combinedNeurodivergent = A + B + C;
+      const ndPct = pct(combinedNeurodivergent, total);
+
+      let title = "Blended or context-dependent pattern";
+      let text = "Your responses are mixed enough that a single label would be too blunt. The better read is to look at where friction clusters and what kind of support lowers that friction.";
+      let why = [];
+      let flags = [];
+
+      if (D >= 10 && combinedNeurodivergent <= 10) {
+        title = "Low visible traits across many situations";
+        text = "A lot of your answers point to lower visible friction across the situations asked about. That can line up with a more neurotypical pattern, but it can also reflect masking, familiarity, support, or traits that mainly show under stress, fatigue, overload, or change.";
+        why = [
+          `D is the strongest lane at ${D}/${total} (${pd}%).`,
+          `ADHD, autism, and overlap together still account for ${combinedNeurodivergent}/${total} (${ndPct}%), so this is not a hard exclusion of neurodivergent traits.`,
+          "This result fits best when visible strain is lower in everyday settings."
+        ];
+        flags = ["Look at where traits appear under pressure, novelty, conflict, change, or overload."];
+      } else if (C >= 7 && C >= A && C >= B && (A >= 3 || B >= 3)) {
+        title = "Strong overlapping AuDHD-style pattern";
+        text = "Your answers lean toward a mixed pattern where ADHD-style and autism-style friction coexist. This often looks like wanting structure but struggling to keep it, shifting between distraction and deep focus, and carrying both attention friction and sensory or social strain.";
+        why = [
+          `Overlap is high at ${C}/${total} (${pc}%).`,
+          `ADHD-leaning answers are ${A}/${total} and autism-leaning answers are ${B}/${total}, which supports a mixed pattern rather than a single-lane result.`,
+          "This result was chosen because the overlap lane is strong and the single-trait lanes are still active."
+        ];
+        flags = ["Support usually works best when it adds structure without becoming too rigid."];
+      } else if (A >= 8 && A > B && A > C && gap >= 2) {
+        title = "ADHD-leaning pattern";
+        text = "Your answers lean more toward ADHD-style friction. This often shows up as lost steps, task initiation friction, jumping attention, time drift, and doing better with visible prompts or external structure.";
+        why = [
+          `ADHD-leaning answers are highest at ${A}/${total} (${pa}%).`,
+          `The next closest lane is ${second.label.toLowerCase()} at ${second.value}/${total}, so the profile is not only a tie.`,
+          "This result was chosen because ADHD-style items are clearly more frequent than the other lanes."
+        ];
+        flags = ["If overlap is still moderate, treat this as ADHD-leaning rather than ADHD-only."];
+      } else if (B >= 8 && B > A && B > C && gap >= 2) {
+        title = "Autism-leaning pattern";
+        text = "Your answers lean more toward autism-style friction. This often shows up as stronger need for clarity and predictability, social processing effort, sensory load, and strain around abrupt change or vague expectations.";
+        why = [
+          `Autism-leaning answers are highest at ${B}/${total} (${pb}%).`,
+          `The next closest lane is ${second.label.toLowerCase()} at ${second.value}/${total}, so the profile is not only a tie.`,
+          "This result was chosen because autism-style items are clearly more frequent than the other lanes."
+        ];
+        flags = ["If overlap is still moderate, treat this as autism-leaning rather than autism-only."];
+      } else if (combinedNeurodivergent >= 12 && D <= 4 && Math.abs(A - B) <= 2) {
+        title = "Mixed neurodivergent pattern without a single dominant lane";
+        text = "Your answers point to meaningful neurodivergent-style friction overall, but it does not resolve neatly into one lane. This can happen when ADHD-style and autism-style traits both show up, but not always in the same way or at the same intensity.";
+        why = [
+          `ADHD, autism, and overlap together account for ${combinedNeurodivergent}/${total} (${ndPct}%).`,
+          `A and B are close together at ${A}/${total} and ${B}/${total}.`,
+          "This result was chosen because the pattern is clearly not low-trait, but also not cleanly single-lane."
+        ];
+        flags = ["Look at the item-level answers. They may tell a better story than the headline label."];
+      } else if (top.value <= 6 && gap <= 1) {
+        title = "Low-contrast or blended pattern";
+        text = "No single lane stands out strongly. That usually means either lower overall friction in these areas, a more context-dependent presentation, or a profile that needs item-level review rather than a headline label.";
+        why = [
+          `Top score is only ${top.value}/${total}.`,
+          `The gap between first and second is ${gap}, which is too small for a confident single-lane result.`,
+          "This result was chosen to avoid overclaiming from weak separation."
+        ];
+        flags = ["This is one of the cases where the raw answers matter more than the headline."];
+      } else {
+        title = "Blended or context-dependent pattern";
+        text = "Your responses show a real pattern, but not one clean enough for a sharp label. The most honest read is that traits likely vary by environment, support, stress, and familiarity.";
+        why = [
+          `Top two lanes are ${top.label.toLowerCase()} (${top.value}/${total}) and ${second.label.toLowerCase()} (${second.value}/${total}).`,
+          `The overall neurodivergent-style share is ${combinedNeurodivergent}/${total} (${ndPct}%).`,
+          "This result was chosen because the pattern is meaningful but still mixed."
+        ];
+        flags = ["Context probably matters a lot for how traits show up."];
+      }
+
+      return {
+        title,
+        text,
+        why,
+        flags,
+        percentages: { A: pa, B: pb, C: pc, D: pd, combined: ndPct },
+        ranked
+      };
+    }
+
+    function renderSummary(data, profile){
+      summaryBox.innerHTML = `
+        <h3>${profile.title}</h3>
+        <p>${profile.text}</p>
+        <p><strong>Totals</strong><br>
+        ADHD-leaning: ${data.A}/${data.total} (${profile.percentages.A}%)<br>
+        Autism-leaning: ${data.B}/${data.total} (${profile.percentages.B}%)<br>
+        Overlap: ${data.C}/${data.total} (${profile.percentages.C}%)<br>
+        Low visible traits: ${data.D}/${data.total} (${profile.percentages.D}%)</p>
+        <div class="pillRow">
+          ${profile.ranked.map(item => `<span class="pill">${item.label}: ${item.value}</span>`).join("")}
+        </div>
+      `;
+    }
+
+    function renderInsights(profile){
+      insightBox.innerHTML = `
+        <h3>Interpretation notes</h3>
+        <p><strong>Why this result was chosen</strong></p>
+        <p>${profile.why.map(item => `• ${item}`).join("<br>")}</p>
+        <p><strong>Keep in mind</strong></p>
+        <p>${profile.flags.map(item => `• ${item}`).join("<br>")}</p>
+      `;
+    }
+
+    function buildSummaryOutput(data, profile){
+      return [
+        "AuDHD Reflection Questionnaire Results",
+        "",
+        `ADHD-leaning (A): ${data.A}/${data.total} (${profile.percentages.A}%)`,
+        `Autism-leaning (B): ${data.B}/${data.total} (${profile.percentages.B}%)`,
+        `Overlap (C): ${data.C}/${data.total} (${profile.percentages.C}%)`,
+        `Low visible traits (D): ${data.D}/${data.total} (${profile.percentages.D}%)`,
+        `Combined neurodivergent-style share (A+B+C): ${data.A + data.B + data.C}/${data.total} (${profile.percentages.combined}%)`,
+        "",
+        `Profile summary: ${profile.title}`,
+        profile.text,
+        "",
+        "Why this result was chosen:",
+        `- ${profile.why[0] || ""}`,
+        `- ${profile.why[1] || ""}`,
+        `- ${profile.why[2] || ""}`,
+        "",
+        "Keep in mind:",
+        ...profile.flags.map(item => `- ${item}`),
+        "",
+        "Ranking:",
+        ...profile.ranked.map(item => `- ${item.label}: ${item.value}`),
+        "",
+        "Note: D does not automatically mean neurotypical. It can also reflect lower visible strain, masking, support, or context.",
+        "Note: Pattern reflection only. Not diagnostic."
+      ].join("\n");
+    }
+
+    function buildAnswersOnlyOutput(data){
+      return data.list.join("\n");
+    }
+
+    function buildAIPromptOutput(data, profile){
+      return [
+        "Analyze these AuDHD questionnaire results.",
+        "",
+        "Important framing:",
+        "- A = ADHD-leaning pattern",
+        "- B = Autism-leaning pattern",
+        "- C = Combined or overlap pattern",
+        "- D = Low visible traits in this situation",
+        "- D does not automatically mean neurotypical. It can also reflect masking, context, support, or lower visible friction in familiar settings.",
+        "",
+        "Provide:",
+        "1. Pattern likelihood for ADHD traits, autism traits, AuDHD overlap, or a context-dependent / low visible trait presentation.",
+        "2. Reasoning based on answer patterns and score balance, not only the highest category.",
+        "3. Likely strengths this cognitive profile brings.",
+        "4. Common friction points.",
+        "5. Practical strategies that may help.",
+        "6. A short plain-English summary I could share with someone else.",
+        "",
+        "Answers:",
+        ...data.list,
+        "",
+        `Totals: A=${data.A}, B=${data.B}, C=${data.C}, D=${data.D}`,
+        `Percentages: A=${profile.percentages.A}%, B=${profile.percentages.B}%, C=${profile.percentages.C}%, D=${profile.percentages.D}%`,
+        `Current tool interpretation: ${profile.title}`,
+        `Why picked: ${profile.why.join(" | ")}`
+      ].join("\n");
+    }
+
+    function drawChart(A, B, C, D, total){
+      const canvas = document.getElementById("profileChart");
+      const ctx = canvas.getContext("2d");
+      const w = canvas.width;
+      const h = canvas.height;
+      const cx = w / 2;
+      const cy = h / 2;
+      const r = 118;
+
+      ctx.clearRect(0, 0, w, h);
+
+      for (let ring = 24; ring <= r; ring += 24) {
+        ctx.beginPath();
+        ctx.arc(cx, cy, ring, 0, Math.PI * 2);
+        ctx.strokeStyle = "#213049";
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      }
+
+      const points = [
+        { label:"ADHD", value:A, angle:-Math.PI/2, color:"#f59e0b" },
+        { label:"Autism", value:B, angle:0, color:"#22c55e" },
+        { label:"Overlap", value:C, angle:Math.PI/2, color:"#60a5fa" },
+        { label:"Low traits", value:D, angle:Math.PI, color:"#a78bfa" }
+      ];
+
+      points.forEach(p => {
+        const x = cx + Math.cos(p.angle) * r;
+        const y = cy + Math.sin(p.angle) * r;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.lineTo(x, y);
+        ctx.strokeStyle = "#334155";
+        ctx.stroke();
+      });
+
+      ctx.beginPath();
+      points.forEach((p, i) => {
+        const scale = p.value / total;
+        const px = cx + Math.cos(p.angle) * r * scale;
+        const py = cy + Math.sin(p.angle) * r * scale;
+        if (i === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      });
+      ctx.closePath();
+      ctx.fillStyle = "rgba(96,165,250,.18)";
+      ctx.strokeStyle = "#93c5fd";
+      ctx.lineWidth = 2;
+      ctx.fill();
+      ctx.stroke();
+
+      points.forEach(p => {
+        const scale = p.value / total;
+        const px = cx + Math.cos(p.angle) * r * scale;
+        const py = cy + Math.sin(p.angle) * r * scale;
+
+        ctx.beginPath();
+        ctx.arc(px, py, 6, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.fill();
+
+        const lx = cx + Math.cos(p.angle) * (r + 34);
+        const ly = cy + Math.sin(p.angle) * (r + 34);
+        ctx.fillStyle = "#e5e7eb";
+        ctx.font = "12px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText(`${p.label}: ${p.value}`, lx, ly);
+      });
+    }
+
+    function generateProfile(){
+      const data = getAnswers();
+
+      if (data.complete < data.total) {
+        showCallout(`Please answer all ${data.total} questions first. You have completed ${data.complete} of ${data.total}.`);
+        return;
+      }
+
+      const profile = interpret(data);
+
+      updateScoreCards(data.A, data.B, data.C, data.D);
+      drawChart(data.A, data.B, data.C, data.D, data.total);
+      renderSummary(data, profile);
+      renderInsights(profile);
+
+      summaryOutput.value = buildSummaryOutput(data, profile);
+      answersOnlyOutput.value = buildAnswersOnlyOutput(data);
+      aiPromptOutput.value = buildAIPromptOutput(data, profile);
+
+      showCallout("Profile generated. Your outputs are ready to copy.", false);
+      document.querySelector(".right").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    async function copyText(text, successMsg){
+      if (!text.trim()) {
+        showCallout("Generate a profile first, then copy the output.");
+        return;
+      }
+
+      try {
+        await navigator.clipboard.writeText(text);
+        showCallout(successMsg, false);
+      } catch {
+        showCallout("Copy failed in this browser. Select the text and copy it manually.");
+      }
+    }
+
+    function resetAll(){
+      document.querySelectorAll('input[type="radio"]').forEach(el => el.checked = false);
+      updateProgress();
+      updateScoreCards(0, 0, 0, 0);
+      drawChart(0, 0, 0, 0, questions.length);
+      summaryBox.innerHTML = `<h3>Profile summary</h3><p class="muted">Complete the questionnaire, then press Generate Profile.</p>`;
+      insightBox.innerHTML = `<h3>Interpretation notes</h3><p class="muted">This area will explain why the result was chosen, not only which letter scored highest.</p>`;
+      summaryOutput.value = "";
+      answersOnlyOutput.value = "";
+      aiPromptOutput.value = "";
+      hideCallout();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    document.getElementById("generateBtn").addEventListener("click", generateProfile);
+    document.getElementById("resetBtn").addEventListener("click", resetAll);
+    document.getElementById("copySummaryBtn").addEventListener("click", () => copyText(summaryOutput.value, "Summary copied to clipboard."));
+    document.getElementById("copyAnswersBtn").addEventListener("click", () => copyText(answersOnlyOutput.value, "Answers copied to clipboard."));
+    document.getElementById("copyAIBtn").addEventListener("click", () => copyText(aiPromptOutput.value, "AI prompt copied to clipboard."));
+
+    renderQuestions();
+    updateProgress();
+    updateScoreCards(0, 0, 0, 0);
+    drawChart(0, 0, 0, 0, questions.length);
+  </script>
+</body>
+</html>
