@@ -1,162 +1,162 @@
 const questions = [
   {
-    q: "When you are given steps to follow",
-    context: "Think about spoken instructions, meeting actions, or jobs with several steps.",
-    A: "I miss steps, forget parts, or start before I have the full plan.",
-    B: "I need the steps to be clear and exact before I feel ready.",
-    C: "I need clear steps, and I still lose track once I start.",
-    D: "I usually understand the steps and follow them without much trouble."
+    q: "When someone gives you instructions with several steps",
+    context: "Think about spoken instructions, meeting actions, or tasks with multiple steps.",
+    A: "When someone gives me several steps, I often miss steps, forget parts, or start before I understand the full plan.",
+    B: "When someone gives me several steps, I need the steps explained clearly and precisely before I feel ready to begin.",
+    C: "When someone gives me several steps, I need clear instructions but I still lose track of them once I start.",
+    D: "When someone gives me several steps, I usually understand the instructions and follow them without much difficulty."
   },
   {
-    q: "When plans change at short notice",
-    context: "Think about cancelled plans, changed meeting times, or a sudden change in priorities.",
-    A: "I switch quickly, but I can lose track of what I was doing.",
-    B: "The change unsettles me and I need time to adjust.",
-    C: "I feel stressed by the change, but I also feel boxed in by fixed plans.",
-    D: "I usually adjust without much stress."
+    q: "When plans change suddenly",
+    context: "Think about cancelled plans, changed meeting times, or unexpected schedule changes.",
+    A: "When plans change suddenly, I can switch quickly but I may lose track of what I was originally doing.",
+    B: "When plans change suddenly, I feel unsettled and need time to adjust.",
+    C: "When plans change suddenly, I feel stressed by the change but also frustrated by rigid plans.",
+    D: "When plans change suddenly, I usually adjust without much stress."
   },
   {
     q: "During everyday conversations",
-    context: "Think about chats with friends, work meetings, and group conversations.",
-    A: "I interrupt, speak too soon, or jump topics.",
-    B: "I spend effort working out tone, timing, or what is expected.",
-    C: "I do both of those things.",
-    D: "Conversation usually feels natural and easy enough."
+    context: "Think about conversations with friends, colleagues, or groups.",
+    A: "During conversations, I often interrupt, speak too quickly, or jump to another topic.",
+    B: "During conversations, I spend effort working out tone, meaning, or when it is my turn to speak.",
+    C: "During conversations, I both interrupt at times and spend effort analysing what people mean.",
+    D: "During conversations, the flow of conversation usually feels natural."
   },
   {
     q: "With daily routines",
-    context: "Think about sleep, meals, work habits, exercise, and admin tasks.",
-    A: "I find it hard to keep routines going.",
-    B: "I like routines and feel better when they stay the same.",
-    C: "I want routines, but I struggle to keep them going.",
-    D: "I can use routines when helpful, but I do not depend on them much."
+    context: "Think about sleep routines, meals, work habits, and personal tasks.",
+    A: "With daily routines, I find it hard to keep routines consistent.",
+    B: "With daily routines, I prefer routines to stay stable and predictable.",
+    C: "With daily routines, I try to build routines but struggle to maintain them.",
+    D: "With daily routines, I can use routines when helpful but I do not depend on them heavily."
   },
   {
-    q: "In noisy, bright, or busy places",
-    context: "Think about crowds, strong smells, bright lights, background noise, or scratchy clothes.",
-    A: "I get distracted and pulled off task.",
-    B: "I feel overloaded or overwhelmed quite quickly.",
-    C: "I cope at first, but it wears me down over time.",
-    D: "Most places like this feel manageable."
+    q: "In noisy, bright, or crowded environments",
+    context: "Think about busy offices, shopping centres, airports, or loud events.",
+    A: "In noisy or busy environments, I get distracted easily and struggle to stay focused.",
+    B: "In noisy or busy environments, the sensory input quickly feels overwhelming.",
+    C: "In noisy or busy environments, I cope at first but feel drained over time.",
+    D: "In noisy or busy environments, I can usually function without much difficulty."
   },
   {
-    q: "With hobbies and interests",
-    context: "Think about hobbies, topics you research, shows, collections, or projects.",
-    A: "I move from one interest to another a lot.",
-    B: "I keep a few deep interests for a long time.",
-    C: "I get very into things, but my main interests rotate.",
-    D: "My interests feel fairly steady and balanced."
+    q: "With hobbies or interests",
+    context: "Think about hobbies, topics you research, shows you follow, or projects you enjoy.",
+    A: "With hobbies or interests, I frequently move from one interest to another.",
+    B: "With hobbies or interests, I usually stay focused on a small number of deep interests for a long time.",
+    C: "With hobbies or interests, I develop intense interests but they rotate over time.",
+    D: "With hobbies or interests, my interests stay fairly balanced and steady."
   },
   {
-    q: "When someone is not clear",
-    context: "Think about vague requests, hints, or open-ended comments.",
-    A: "I fill in the gaps fast, but I can guess wrong.",
-    B: "I want people to say exactly what they mean.",
-    C: "I can work it out, but it takes effort.",
-    D: "I usually work out the meaning without much trouble."
+    q: "When communication is vague or unclear",
+    context: "Think about hints, open-ended requests, or unclear instructions.",
+    A: "When communication is vague, I tend to guess the meaning quickly but may guess incorrectly.",
+    B: "When communication is vague, I prefer people to explain exactly what they mean.",
+    C: "When communication is vague, I can work out the meaning but it takes effort.",
+    D: "When communication is vague, I usually understand the intended meaning."
   },
   {
-    q: "With attention and focus",
-    context: "Think about work, study, chores, hobbies, and conversations.",
-    A: "My attention moves around quickly.",
-    B: "I can stay locked onto one thing for a long time.",
-    C: "Both of those happen a lot for me.",
-    D: "My focus is fairly steady for what I need to do."
+    q: "With attention and concentration",
+    context: "Think about work, study, chores, or conversations.",
+    A: "With attention and concentration, my attention shifts quickly from one thing to another.",
+    B: "With attention and concentration, I can stay focused on one thing for a long period of time.",
+    C: "With attention and concentration, I experience both intense focus and rapid distraction.",
+    D: "With attention and concentration, my focus is usually steady enough for what I need to do."
   },
   {
     q: "After a conversation ends",
-    context: "Think about how often you replay conversations in your head.",
-    A: "I move on fast, sometimes before I have taken it all in.",
-    B: "I replay it and think about what people meant.",
-    C: "I do that sometimes, mostly if it felt unclear or tense.",
-    D: "I usually move on without much replay or doubt."
+    context: "Think about how often you think about a conversation afterwards.",
+    A: "After conversations, I usually move on quickly and do not think about them again.",
+    B: "After conversations, I often replay the conversation and analyse what people meant.",
+    C: "After conversations, I sometimes replay the conversation if it felt confusing or tense.",
+    D: "After conversations, I rarely feel the need to analyse what happened."
   },
   {
-    q: "When you need to start a boring task",
-    context: "Think about emails, forms, chores, or low-interest tasks.",
-    A: "Starting feels hard, even when I know it matters.",
-    B: "I need a clear plan or structure before I can start well.",
-    C: "I need structure, and I still struggle to start.",
-    D: "I can usually get started without major trouble."
+    q: "When starting a task you are not interested in",
+    context: "Think about emails, forms, chores, or routine work tasks.",
+    A: "When starting an uninteresting task, I struggle to begin even when I know the task matters.",
+    B: "When starting an uninteresting task, I need a clear structure or plan before I begin.",
+    C: "When starting an uninteresting task, I need structure and still find it difficult to begin.",
+    D: "When starting an uninteresting task, I can usually start the task without major difficulty."
   },
   {
     q: "After spending time with people",
-    context: "Think about the kind of tiredness you feel after social time.",
-    A: "I feel restless, bored, or under-stimulated.",
-    B: "I feel drained by the social effort, reading people, or holding it together.",
-    C: "Both of those happen.",
-    D: "Social time is usually manageable and not too draining."
+    context: "Think about social events, gatherings, or group activities.",
+    A: "After social time, I often feel restless or under-stimulated.",
+    B: "After social time, I feel mentally drained from the effort of social interaction.",
+    C: "After social time, I sometimes feel both restless and socially drained.",
+    D: "After social time, I usually feel fine and recover quickly."
   },
   {
     q: "When learning something new",
-    context: "Think about how you naturally learn, not how you were taught at school.",
-    A: "I skim, explore widely, and jump across topics.",
-    B: "I prefer deep learning in one clear area at a time.",
-    C: "I go deep, but across several linked topics.",
-    D: "I can learn in different ways without much strain."
+    context: "Think about how you naturally approach learning new topics.",
+    A: "When learning something new, I explore widely and jump between related topics.",
+    B: "When learning something new, I prefer to go deeply into one topic at a time.",
+    C: "When learning something new, I go deeply into several connected topics.",
+    D: "When learning something new, I can learn in different ways without difficulty."
   },
   {
-    q: "With rules, systems, and processes",
-    context: "Think about policies, instructions, games, or agreed ways of doing things.",
-    A: "I miss details or skip parts by accident.",
-    B: "I want systems to make sense and stay consistent.",
-    C: "I notice when things do not make sense, but I still miss parts at times.",
-    D: "I can usually follow systems without much strain."
+    q: "When following rules or systems",
+    context: "Think about workplace rules, instructions, or organised systems.",
+    A: "When following rules or systems, I sometimes miss details or skip steps by accident.",
+    B: "When following rules or systems, I want the rules to be logical and consistent.",
+    C: "When following rules or systems, I notice inconsistencies but still miss details at times.",
+    D: "When following rules or systems, I can usually follow the rules without difficulty."
   },
   {
-    q: "When emotions rise",
-    context: "Think about frustration, shame, rejection, stress, or feeling overwhelmed.",
-    A: "My reaction rises fast and hits hard.",
-    B: "My reaction builds more slowly and stays with me.",
-    C: "Once it starts, it can be hard to settle again.",
-    D: "My reactions are usually manageable for the situation."
+    q: "When strong emotions appear",
+    context: "Think about frustration, rejection, embarrassment, or stress.",
+    A: "When strong emotions appear, my emotional reactions rise quickly and strongly.",
+    B: "When strong emotions appear, my emotional reactions build slowly but last longer.",
+    C: "When strong emotions appear, once the emotion starts it is difficult for me to settle again.",
+    D: "When strong emotions appear, my reactions are usually manageable."
   },
   {
-    q: "With organisation",
-    context: "Think about your desk, inbox, task list, home systems, or life admin.",
-    A: "Things often get messy or chaotic around me.",
-    B: "I like order and feel better when things are organised.",
-    C: "I build good systems, but I do not keep them going well.",
-    D: "My organisation is usually good enough without much effort."
+    q: "With personal organisation",
+    context: "Think about your workspace, task lists, inbox, or home organisation.",
+    A: "With personal organisation, my environment often becomes messy or disorganised.",
+    B: "With personal organisation, I prefer things to stay structured and organised.",
+    C: "With personal organisation, I create good systems but struggle to maintain them.",
+    D: "With personal organisation, my organisation usually stays workable."
   },
   {
-    q: "When something is interesting",
-    context: "Think about games, hobbies, urgent research, or work you care about.",
-    A: "I start strong, but later get pulled away.",
-    B: "I can stay absorbed in it for hours.",
-    C: "I can get so focused that I lose track of time or my needs.",
-    D: "I stay engaged, but I usually keep balance and awareness."
+    q: "When something strongly interests you",
+    context: "Think about hobbies, games, research topics, or work you enjoy.",
+    A: "When something interests me, I may start enthusiastically but later lose focus.",
+    B: "When something interests me, I can stay absorbed in it for hours.",
+    C: "When something interests me, I can become so focused that I lose track of time or needs.",
+    D: "When something interests me, I stay engaged but keep a sense of balance."
   },
   {
-    q: "Reading facial expressions and social cues",
-    context: "Think about tone of voice, mood, hints, and body language.",
-    A: "I miss cues because I move too fast or my attention shifts.",
-    B: "I often find cues hard to read.",
-    C: "I can read them, but I need to think about it.",
-    D: "I usually pick up social cues without much effort."
+    q: "When reading facial expressions or social signals",
+    context: "Think about tone of voice, body language, or implied meaning.",
+    A: "When reading social signals, I sometimes miss them because my attention shifts.",
+    B: "When reading social signals, I often find them difficult to interpret.",
+    C: "When reading social signals, I can understand them but need to think about them.",
+    D: "When reading social signals, I usually recognise them automatically."
   },
   {
-    q: "In places with a lot going on",
-    context: "Think about airports, shopping centres, open-plan offices, schools, or family gatherings.",
-    A: "There is too much to notice, and I get pulled in many directions.",
-    B: "It feels overwhelming.",
-    C: "I seem fine at first, but it drains me later.",
-    D: "I can usually function in places like this without major strain."
+    q: "In environments where many things are happening",
+    context: "Think about airports, shopping centres, classrooms, or busy offices.",
+    A: "In busy environments, my attention gets pulled in many directions.",
+    B: "In busy environments, the situation quickly feels overwhelming.",
+    C: "In busy environments, I appear fine but feel drained afterwards.",
+    D: "In busy environments, I can usually function without much difficulty."
   },
   {
     q: "When planning your day",
-    context: "Think about setting priorities and then following through.",
-    A: "I lose sight of priorities or get pulled into the loudest thing.",
-    B: "I like having a plan or schedule and feel better with one.",
-    C: "I make plans, but I often do not follow them the way I meant to.",
-    D: "I can usually plan and follow through without major trouble."
+    context: "Think about deciding priorities and completing tasks.",
+    A: "When planning my day, I often lose track of priorities.",
+    B: "When planning my day, I prefer to follow a clear schedule or plan.",
+    C: "When planning my day, I make plans but struggle to follow them.",
+    D: "When planning my day, I usually plan and follow through effectively."
   },
   {
-    q: "Overall, what causes the most day-to-day friction",
-    context: "Pick the broad pattern that fits most often.",
-    A: "Attention, getting started, following through, or losing steps.",
-    B: "Sensory load, social effort, change, or needing predictability.",
-    C: "A real mix of both.",
-    D: "None of those feels like a major ongoing issue most of the time."
+    q: "Looking at your day-to-day life overall",
+    context: "Choose the pattern that causes the most consistent friction.",
+    A: "Attention, task initiation, or follow-through cause the most friction in my daily life.",
+    B: "Sensory overload, social processing, or change cause the most friction in my daily life.",
+    C: "A mixture of attention challenges and sensory or social challenges causes friction in my daily life.",
+    D: "None of these patterns cause major ongoing friction in my daily life."
   }
 ];
